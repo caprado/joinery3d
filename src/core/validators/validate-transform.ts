@@ -1,13 +1,11 @@
 import { type Result, ok, err } from '../fp/result'
 import type { Transform } from '../../schema/transform'
 import type { ValidationError } from '../../schema/validation-error'
+import { isRecord } from './is-record'
 import { validateVec3 } from './validate-vec3'
 
 const isFiniteNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value)
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 export const validateTransform = (
   value: unknown,
