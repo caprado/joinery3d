@@ -1,0 +1,28 @@
+{
+  "id": "chest_body",
+  "name": "Chest Body",
+  "tags": [
+    "body"
+  ],
+  "meshFile": "parts/body/chest_body.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "wood_dark"
+    }
+  ],
+  "thumbnailFile": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "lid_open",
+  "name": "Lid (Open)",
+  "tags": [
+    "lid"
+  ],
+  "meshFile": "parts/lid/lid_open.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0.16,
+      0
+    ],
+    "rotation": [
+      -1.047,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "wood_dark"
+    }
+  ],
+  "thumbnailFile": null
+}

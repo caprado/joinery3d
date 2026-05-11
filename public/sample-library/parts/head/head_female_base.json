@@ -1,0 +1,28 @@
+{
+  "id": "head_female_base",
+  "name": "Female Head (Base)",
+  "tags": [
+    "head"
+  ],
+  "meshFile": "parts/head/head_female_base.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "skin_pale"
+    }
+  ],
+  "thumbnailFile": null
+}

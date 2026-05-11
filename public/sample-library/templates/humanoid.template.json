@@ -1,0 +1,80 @@
+{
+  "id": "humanoid",
+  "name": "Humanoid",
+  "description": "Basic biped with paired limbs",
+  "version": 1,
+  "slots": [
+    {
+      "tag": "head",
+      "name": "Head",
+      "anchor": {
+        "position": [0, 1.6, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "head_male_base",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "torso",
+      "name": "Torso",
+      "anchor": {
+        "position": [0, 1.0, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "torso_male_base",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "left_arm",
+      "name": "Left Arm",
+      "anchor": {
+        "position": [-0.35, 1.2, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "arm_human_base",
+      "pairedSlot": "right_arm",
+      "required": true
+    },
+    {
+      "tag": "right_arm",
+      "name": "Right Arm",
+      "anchor": {
+        "position": [0.35, 1.2, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "arm_human_base_r",
+      "pairedSlot": "left_arm",
+      "required": true
+    },
+    {
+      "tag": "left_leg",
+      "name": "Left Leg",
+      "anchor": {
+        "position": [-0.15, 0.35, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "leg_human_base",
+      "pairedSlot": "right_leg",
+      "required": true
+    },
+    {
+      "tag": "right_leg",
+      "name": "Right Leg",
+      "anchor": {
+        "position": [0.15, 0.35, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "leg_human_base_r",
+      "pairedSlot": "left_leg",
+      "required": true
+    }
+  ]
+}

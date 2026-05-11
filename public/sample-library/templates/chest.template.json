@@ -1,0 +1,44 @@
+{
+  "id": "chest",
+  "name": "Chest",
+  "description": "Container with lid and lock",
+  "version": 1,
+  "slots": [
+    {
+      "tag": "body",
+      "name": "Body",
+      "anchor": {
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "chest_body",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "lid",
+      "name": "Lid",
+      "anchor": {
+        "position": [0, 0.25, -0.3],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "lid_closed",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "lock",
+      "name": "Lock",
+      "anchor": {
+        "position": [0, 0.15, 0.3],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "lock_iron",
+      "pairedSlot": null,
+      "required": false
+    }
+  ]
+}

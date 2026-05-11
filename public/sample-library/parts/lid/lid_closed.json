@@ -1,0 +1,28 @@
+{
+  "id": "lid_closed",
+  "name": "Lid (Closed)",
+  "tags": [
+    "lid"
+  ],
+  "meshFile": "parts/lid/lid_closed.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "wood_dark"
+    }
+  ],
+  "thumbnailFile": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "arm_human_base",
+  "name": "Human Arm (Left)",
+  "tags": [
+    "left_arm"
+  ],
+  "meshFile": "parts/left_arm/arm_human_base.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "skin_pale"
+    }
+  ],
+  "thumbnailFile": null
+}

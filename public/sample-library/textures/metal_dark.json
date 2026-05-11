@@ -1,0 +1,11 @@
+{
+  "id": "metal_dark",
+  "name": "Dark Metal",
+  "file": "textures/metal_dark.png",
+  "width": 64,
+  "height": 64,
+  "tags": [
+    "metal",
+    "armor"
+  ]
+}

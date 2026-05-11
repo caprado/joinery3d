@@ -1,0 +1,28 @@
+{
+  "id": "leg_human_base_r",
+  "name": "Human Leg (Right)",
+  "tags": [
+    "right_leg"
+  ],
+  "meshFile": "parts/right_leg/leg_human_base_r.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "skin_pale"
+    }
+  ],
+  "thumbnailFile": null
+}

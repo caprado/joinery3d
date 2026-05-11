@@ -1,0 +1,28 @@
+{
+  "id": "leg_armored",
+  "name": "Armored Leg (Left)",
+  "tags": [
+    "left_leg"
+  ],
+  "meshFile": "parts/left_leg/leg_armored.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "metal_dark"
+    }
+  ],
+  "thumbnailFile": null
+}

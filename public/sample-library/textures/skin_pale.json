@@ -1,0 +1,11 @@
+{
+  "id": "skin_pale",
+  "name": "Pale Skin",
+  "file": "textures/skin_pale.png",
+  "width": 64,
+  "height": 64,
+  "tags": [
+    "skin",
+    "human"
+  ]
+}

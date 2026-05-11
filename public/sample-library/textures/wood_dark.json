@@ -1,0 +1,11 @@
+{
+  "id": "wood_dark",
+  "name": "Dark Wood",
+  "file": "textures/wood_dark.png",
+  "width": 64,
+  "height": 64,
+  "tags": [
+    "wood",
+    "furniture"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "leg_elf",
+  "name": "Elf Leg (Left)",
+  "tags": [
+    "left_leg"
+  ],
+  "meshFile": "parts/left_leg/leg_elf.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "skin_pale"
+    }
+  ],
+  "thumbnailFile": null
+}
