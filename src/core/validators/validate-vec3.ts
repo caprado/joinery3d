@@ -12,7 +12,9 @@ export const validateVec3 = (value: unknown, path: string): Result<Vec3, Validat
   if (value.length !== 3) {
     return err({ path, message: 'Expected array of length 3', received: value })
   }
-  const [x, y, z] = value as unknown as readonly [unknown, unknown, unknown]
+  const x: unknown = value[0]
+  const y: unknown = value[1]
+  const z: unknown = value[2]
   if (!isFiniteNumber(x)) {
     return err({ path: `${path}[0]`, message: 'Expected a finite number', received: x })
   }
@@ -22,5 +24,6 @@ export const validateVec3 = (value: unknown, path: string): Result<Vec3, Validat
   if (!isFiniteNumber(z)) {
     return err({ path: `${path}[2]`, message: 'Expected a finite number', received: z })
   }
-  return ok([x, y, z] as const)
+  const result: Vec3 = [x, y, z]
+  return ok(result)
 }
