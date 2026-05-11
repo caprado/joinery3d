@@ -1,0 +1,47 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #1a1a2e;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.app-topbar h1 {
+  margin: 0;
+  font-size: 16px;
+  color: #e0e0e0;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-sidebar-left {
+  background: #1e1e2e;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+}
+
+.app-viewport {
+  position: relative;
+  background: #111;
+  overflow: hidden;
+}
+
+.app-sidebar-right {
+  background: #1e1e2e;
+  border-left: 1px solid #333;
+  overflow-y: auto;
+}

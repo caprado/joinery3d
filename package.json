@@ -1,7 +1,7 @@
 {
   "name": "joinery3d",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,6 +34,7 @@
     "eslint-plugin-functional": "^9.0.4",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "happy-dom": "^20.9.0",
     "husky": "^9.1.7",
     "prettier": "^3.8.3",
     "typescript": "~5.7.0",

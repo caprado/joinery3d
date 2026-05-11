@@ -46,9 +46,12 @@ describe('applySnap', () => {
       scale: scaleVec,
     }
     const snapped = applySnap(transform, 0, 0, 0.1)
-    expect((snapped.scale as readonly number[])[0]).toBeCloseTo(1.0)
-    expect((snapped.scale as readonly number[])[1]).toBeCloseTo(2.1)
-    expect((snapped.scale as readonly number[])[2]).toBeCloseTo(3.1)
+    expect(typeof snapped.scale).not.toBe('number')
+    if (typeof snapped.scale !== 'number') {
+      expect(snapped.scale[0]).toBeCloseTo(1.0)
+      expect(snapped.scale[1]).toBeCloseTo(2.1)
+      expect(snapped.scale[2]).toBeCloseTo(3.1)
+    }
   })
 
   it('does not snap when increment is zero', () => {

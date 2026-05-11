@@ -119,4 +119,13 @@ export default [
       'functional/no-let': 'off',
     },
   },
+
+  // Test files need DOM mutation for assertions
+  {
+    files: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    rules: {
+      'functional/immutable-data': 'off',
+      'functional/no-let': 'off',
+    },
+  },
 ]
