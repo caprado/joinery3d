@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicedoc/tauri-plugin-schema/refs/heads/main/v2.json",
+  "productName": "Joinery3D",
+  "identifier": "com.joinery3d.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Joinery3D",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}

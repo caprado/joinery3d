@@ -1,0 +1,22 @@
+[package]
+name = "joinery3d"
+version = "0.0.0"
+description = "A modular 3D asset assembler"
+authors = ["Chris"]
+edition = "2021"
+
+[lib]
+name = "joinery3d_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+notify = "8"
+walkdir = "2"
+ts-rs = "10"
