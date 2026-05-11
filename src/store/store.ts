@@ -1,0 +1,107 @@
+import { createStore } from 'zustand/vanilla'
+import type { PartId, SlotTag, TextureId } from '../schema/ids'
+import type { AssetInstance } from '../schema/instance'
+import type { LibraryIndex } from '../schema/library'
+import type { TextureChannel } from '../schema/part'
+import type { Transform } from '../schema/transform'
+import type { AppState, EditorOptions, Selection, ToolMode, ViewOptions } from './state'
+import { initialState } from './state'
+import { libraryLoaded } from './actions/library-loaded'
+import { libraryReloaded } from './actions/library-reloaded'
+import { instanceCreated } from './actions/instance-created'
+import { instanceLoaded } from './actions/instance-loaded'
+import { instanceSaved } from './actions/instance-saved'
+import { instanceRenamed } from './actions/instance-renamed'
+import { setSlotPart } from './actions/set-slot-part'
+import { setSlotOffset } from './actions/set-slot-offset'
+import { resetSlotOffset } from './actions/reset-slot-offset'
+import { setSlotTexture } from './actions/set-slot-texture'
+import { savePartDefaultOffset } from './actions/save-part-default-offset'
+import { setSelection } from './actions/set-selection'
+import { setToolMode } from './actions/set-tool-mode'
+import { toggleViewOption } from './actions/toggle-view-option'
+import { setEditorOption } from './actions/set-editor-option'
+import { undo } from './actions/undo'
+import { redo } from './actions/redo'
+
+export type StoreActions = {
+  readonly libraryLoaded: (library: LibraryIndex, path: string) => void
+  readonly libraryReloaded: (library: LibraryIndex) => void
+  readonly instanceCreated: (instance: AssetInstance) => void
+  readonly instanceLoaded: (instance: AssetInstance, path: string) => void
+  readonly instanceSaved: (path: string) => void
+  readonly instanceRenamed: (name: string) => void
+  readonly setSlotPart: (slotTagValue: SlotTag, partIdValue: PartId) => void
+  readonly setSlotOffset: (slotTagValue: SlotTag, offset: Transform) => void
+  readonly resetSlotOffset: (slotTagValue: SlotTag) => void
+  readonly setSlotTexture: (
+    slotTagValue: SlotTag,
+    channel: TextureChannel,
+    newTextureId: TextureId | undefined,
+  ) => void
+  readonly savePartDefaultOffset: (targetPartId: PartId, offset: Transform) => void
+  readonly setSelection: (selection: Selection) => void
+  readonly setToolMode: (mode: ToolMode) => void
+  readonly toggleViewOption: (option: keyof ViewOptions) => void
+  readonly setEditorOption: (options: Partial<EditorOptions>) => void
+  readonly undo: () => void
+  readonly redo: () => void
+}
+
+export type Store = AppState & StoreActions
+
+export const createAppStore = () =>
+  createStore<Store>((set) => ({
+    ...initialState,
+    libraryLoaded: (library, path) => {
+      set((state) => libraryLoaded(state, library, path))
+    },
+    libraryReloaded: (library) => {
+      set((state) => libraryReloaded(state, library))
+    },
+    instanceCreated: (instance) => {
+      set((state) => instanceCreated(state, instance))
+    },
+    instanceLoaded: (instance, path) => {
+      set((state) => instanceLoaded(state, instance, path))
+    },
+    instanceSaved: (path) => {
+      set((state) => instanceSaved(state, path))
+    },
+    instanceRenamed: (name) => {
+      set((state) => instanceRenamed(state, name))
+    },
+    setSlotPart: (slotTagValue, partIdValue) => {
+      set((state) => setSlotPart(state, slotTagValue, partIdValue))
+    },
+    setSlotOffset: (slotTagValue, offset) => {
+      set((state) => setSlotOffset(state, slotTagValue, offset))
+    },
+    resetSlotOffset: (slotTagValue) => {
+      set((state) => resetSlotOffset(state, slotTagValue))
+    },
+    setSlotTexture: (slotTagValue, channel, newTextureId) => {
+      set((state) => setSlotTexture(state, slotTagValue, channel, newTextureId))
+    },
+    savePartDefaultOffset: (targetPartId, offset) => {
+      set((state) => savePartDefaultOffset(state, targetPartId, offset))
+    },
+    setSelection: (selection) => {
+      set((state) => setSelection(state, selection))
+    },
+    setToolMode: (mode) => {
+      set((state) => setToolMode(state, mode))
+    },
+    toggleViewOption: (option) => {
+      set((state) => toggleViewOption(state, option))
+    },
+    setEditorOption: (options) => {
+      set((state) => setEditorOption(state, options))
+    },
+    undo: () => {
+      set((state) => undo(state))
+    },
+    redo: () => {
+      set((state) => redo(state))
+    },
+  }))
