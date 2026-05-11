@@ -1,0 +1,18 @@
+export function compose<A, B>(fn1: (a: A) => B): (a: A) => B
+export function compose<A, B, C>(fn2: (b: B) => C, fn1: (a: A) => B): (a: A) => C
+export function compose<A, B, C, D>(
+  fn3: (c: C) => D,
+  fn2: (b: B) => C,
+  fn1: (a: A) => B,
+): (a: A) => D
+export function compose<A, B, C, D, E>(
+  fn4: (d: D) => E,
+  fn3: (c: C) => D,
+  fn2: (b: B) => C,
+  fn1: (a: A) => B,
+): (a: A) => E
+export function compose(
+  ...fns: ReadonlyArray<(arg: unknown) => unknown>
+): (arg: unknown) => unknown {
+  return (arg: unknown) => fns.reduceRight((acc, fn) => fn(acc), arg)
+}
