@@ -110,4 +110,13 @@ export default [
       }],
     },
   },
+
+  // Shell and viewport are the impure layers — allow mutable data patterns
+  {
+    files: ['src/shell/**/*.ts', 'src/viewport/**/*.ts'],
+    rules: {
+      'functional/immutable-data': 'off',
+      'functional/no-let': 'off',
+    },
+  },
 ]
