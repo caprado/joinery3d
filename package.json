@@ -13,6 +13,7 @@
     "lint": "eslint src/",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
+    "generate:schema": "cd src-tauri && TS_RS_EXPORT_DIR=../src/schema/generated cargo test",
     "prepare": "husky"
   },
   "dependencies": {
