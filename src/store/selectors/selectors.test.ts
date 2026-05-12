@@ -144,7 +144,7 @@ describe('selectCanUndo', () => {
       ...initialState,
       history: {
         ...initialState.history,
-        past: [{ label: 'test', previousState: {} }],
+        past: [{ label: 'test', previousState: { currentInstance: undefined, dirty: false } }],
       },
     }
     expect(selectCanUndo(withHistory)).toBe(true)
@@ -161,7 +161,7 @@ describe('selectCanRedo', () => {
       ...initialState,
       history: {
         ...initialState.history,
-        future: [{ label: 'test', previousState: {} }],
+        future: [{ label: 'test', previousState: { currentInstance: undefined, dirty: false } }],
       },
     }
     expect(selectCanRedo(withFuture)).toBe(true)

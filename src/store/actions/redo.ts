@@ -1,24 +1,19 @@
-import type { AppState } from '../state'
+import { popRedo } from '../../core/history'
+import type { AppState, UndoableSnapshot } from '../state'
 
-export const redo = (state: AppState): AppState => {
-  const nextEntry = state.history.future[0]
-  if (nextEntry === undefined) return state
-
-  return {
-    ...state,
-    ...nextEntry.previousState,
-    history: {
-      ...state.history,
-      future: state.history.future.slice(1),
-      past: [
-        ...state.history.past,
-        { label: nextEntry.label, previousState: extractUndoableState(state) },
-      ],
-    },
-  }
-}
-
-const extractUndoableState = (state: AppState): Partial<AppState> => ({
+const takeSnapshot = (state: AppState): UndoableSnapshot => ({
   currentInstance: state.currentInstance,
   dirty: state.dirty,
 })
+
+export const redo = (state: AppState): AppState => {
+  const result = popRedo(state.history, takeSnapshot(state))
+  if (result === undefined) return state
+
+  return {
+    ...state,
+    currentInstance: result.snapshot.currentInstance,
+    dirty: result.snapshot.dirty,
+    history: result.history,
+  }
+}

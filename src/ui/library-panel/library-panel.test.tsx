@@ -107,4 +107,57 @@ describe('LibraryPanel', () => {
     const input = container.querySelector('.library-search-input')
     expect(input).not.toBeNull()
   })
+
+  it('filters parts when search query is typed', async () => {
+    const container = document.createElement('div')
+    render(
+      <LibraryPanel
+        availableParts={[headPart, headElfPart]}
+        library={library}
+        onPartSelected={() => undefined}
+      />,
+      container,
+    )
+
+    const input = container.querySelector('.library-search-input')
+    if (input instanceof HTMLInputElement) {
+      input.value = 'Elf'
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+
+    await new Promise((resolve) => { setTimeout(resolve, 0) })
+
+    const items = container.querySelectorAll('.library-part-item')
+    expect(items.length).toBe(1)
+    expect(container.textContent).toContain('Elf Head')
+    expect(container.textContent).not.toContain('Male Head')
+  })
+
+  it('restores full list when search is cleared', async () => {
+    const container = document.createElement('div')
+    render(
+      <LibraryPanel
+        availableParts={[headPart, headElfPart]}
+        library={library}
+        onPartSelected={() => undefined}
+      />,
+      container,
+    )
+
+    const input = container.querySelector('.library-search-input')
+    if (input instanceof HTMLInputElement) {
+      input.value = 'Elf'
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+    await new Promise((resolve) => { setTimeout(resolve, 0) })
+
+    if (input instanceof HTMLInputElement) {
+      input.value = ''
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+    await new Promise((resolve) => { setTimeout(resolve, 0) })
+
+    const items = container.querySelectorAll('.library-part-item')
+    expect(items.length).toBe(2)
+  })
 })

@@ -4,7 +4,8 @@ import type { AssetInstance } from '../schema/instance'
 import type { LibraryIndex } from '../schema/library'
 import type { TextureChannel } from '../schema/part'
 import type { Transform } from '../schema/transform'
-import type { AppState, EditorOptions, Selection, ToolMode, ViewOptions } from './state'
+import { pushHistory } from '../core/history'
+import type { AppState, EditorOptions, Selection, ToolMode, UndoableSnapshot, ViewOptions } from './state'
 import { initialState } from './state'
 import { libraryLoaded } from './actions/library-loaded'
 import { libraryReloaded } from './actions/library-reloaded'
@@ -50,6 +51,23 @@ export type StoreActions = {
 
 export type Store = AppState & StoreActions
 
+const takeSnapshot = (state: AppState): UndoableSnapshot => ({
+  currentInstance: state.currentInstance,
+  dirty: state.dirty,
+})
+
+const withHistory = (
+  state: AppState,
+  label: string,
+  action: (s: AppState) => AppState,
+): AppState => {
+  const stateWithHistory: AppState = {
+    ...state,
+    history: pushHistory(state.history, label, takeSnapshot(state)),
+  }
+  return action(stateWithHistory)
+}
+
 export const createAppStore = () =>
   createStore<Store>((set) => ({
     ...initialState,
@@ -69,22 +87,22 @@ export const createAppStore = () =>
       set((state) => instanceSaved(state, path))
     },
     instanceRenamed: (name) => {
-      set((state) => instanceRenamed(state, name))
+      set((state) => withHistory(state, 'Rename', (s) => instanceRenamed(s, name)))
     },
     setSlotPart: (slotTagValue, partIdValue) => {
-      set((state) => setSlotPart(state, slotTagValue, partIdValue))
+      set((state) => withHistory(state, 'Swap part', (s) => setSlotPart(s, slotTagValue, partIdValue)))
     },
     setSlotOffset: (slotTagValue, offset) => {
-      set((state) => setSlotOffset(state, slotTagValue, offset))
+      set((state) => withHistory(state, 'Adjust offset', (s) => setSlotOffset(s, slotTagValue, offset)))
     },
     resetSlotOffset: (slotTagValue) => {
-      set((state) => resetSlotOffset(state, slotTagValue))
+      set((state) => withHistory(state, 'Reset offset', (s) => resetSlotOffset(s, slotTagValue)))
     },
     setSlotTexture: (slotTagValue, channel, newTextureId) => {
-      set((state) => setSlotTexture(state, slotTagValue, channel, newTextureId))
+      set((state) => withHistory(state, 'Change texture', (s) => setSlotTexture(s, slotTagValue, channel, newTextureId)))
     },
     savePartDefaultOffset: (targetPartId, offset) => {
-      set((state) => savePartDefaultOffset(state, targetPartId, offset))
+      set((state) => withHistory(state, 'Save part default', (s) => savePartDefaultOffset(s, targetPartId, offset)))
     },
     setSelection: (selection) => {
       set((state) => setSelection(state, selection))

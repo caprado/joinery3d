@@ -2,6 +2,8 @@ import type { SlotTag } from '../schema/ids'
 import type { AssetInstance } from '../schema/instance'
 import type { LibraryIndex } from '../schema/library'
 import { emptyLibrary } from '../schema/library'
+import type { HistoryState } from '../core/history'
+import { emptyHistory } from '../core/history'
 
 export type Selection = { readonly kind: 'none' } | { readonly kind: 'slot'; readonly slotTag: SlotTag }
 
@@ -21,15 +23,9 @@ export type EditorOptions = {
   readonly mirrorEnabled: boolean
 }
 
-export type HistoryEntry = {
-  readonly label: string
-  readonly previousState: Partial<AppState>
-}
-
-export type HistoryState = {
-  readonly past: readonly HistoryEntry[]
-  readonly future: readonly HistoryEntry[]
-  readonly limit: number
+export type UndoableSnapshot = {
+  readonly currentInstance: AssetInstance | undefined
+  readonly dirty: boolean
 }
 
 export type AppState = {
@@ -41,7 +37,7 @@ export type AppState = {
   readonly toolMode: ToolMode
   readonly viewOptions: ViewOptions
   readonly editorOptions: EditorOptions
-  readonly history: HistoryState
+  readonly history: HistoryState<UndoableSnapshot>
   readonly dirty: boolean
 }
 
@@ -60,14 +56,10 @@ export const initialState: AppState = {
   editorOptions: {
     snapEnabled: false,
     snapTranslation: 0.05,
-    snapRotation: 0.0872665, // 5 degrees in radians
+    snapRotation: 0.0872665,
     snapScale: 0.1,
     mirrorEnabled: false,
   },
-  history: {
-    past: [],
-    future: [],
-    limit: 50,
-  },
+  history: emptyHistory(50),
   dirty: false,
 }
