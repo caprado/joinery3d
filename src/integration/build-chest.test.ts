@@ -41,7 +41,7 @@ const chestBody: Part = {
   tags: [bodyTag],
   meshFile: 'parts/body/chest_body.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -51,7 +51,7 @@ const lidClosed: Part = {
   tags: [lidTag],
   meshFile: 'parts/lid/lid_closed.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -61,7 +61,7 @@ const lidOpen: Part = {
   tags: [lidTag],
   meshFile: 'parts/lid/lid_open.glb',
   defaultOffset: { position: [0, 0.16, 0], rotation: [-1.047, 0, 0], scale: 1 },
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -71,7 +71,7 @@ const lidBroken: Part = {
   tags: [lidTag],
   meshFile: 'parts/lid/lid_broken.glb',
   defaultOffset: { position: [0.05, -0.02, 0], rotation: [0, 0, 0.15], scale: 1 },
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: woodDarkId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -146,7 +146,7 @@ describe('End-to-end: build a chest with state variants', () => {
     const renderDesc = buildRenderDescription(withBrokenLid, chestTemplate, library)
     expect(renderDesc.nodes).toHaveLength(3)
 
-    const lidNode = renderDesc.nodes.find((n) => n.slotTag.value === 'lid')
+    const lidNode = renderDesc.nodes.find((node) => node.slotTag.value === 'lid')
     expect(lidNode?.meshFile).toBe('parts/lid/lid_broken.glb')
     expect(lidNode?.partId.value).toBe('lid_broken')
 
@@ -207,11 +207,11 @@ describe('End-to-end: build a chest with state variants', () => {
 
     // Each swap renders correctly
     const openDesc = buildRenderDescription(withOpen, chestTemplate, library)
-    const openLid = openDesc.nodes.find((n) => n.slotTag.value === 'lid')
+    const openLid = openDesc.nodes.find((node) => node.slotTag.value === 'lid')
     expect(openLid?.meshFile).toBe('parts/lid/lid_open.glb')
 
     const brokenDesc = buildRenderDescription(withBroken, chestTemplate, library)
-    const brokenLid = brokenDesc.nodes.find((n) => n.slotTag.value === 'lid')
+    const brokenLid = brokenDesc.nodes.find((node) => node.slotTag.value === 'lid')
     expect(brokenLid?.meshFile).toBe('parts/lid/lid_broken.glb')
   })
 })

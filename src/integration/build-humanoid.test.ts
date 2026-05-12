@@ -41,7 +41,7 @@ const headMale: Part = {
   tags: [headTag],
   meshFile: 'parts/head/head_male_base.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -51,7 +51,7 @@ const headElf: Part = {
   tags: [headTag],
   meshFile: 'parts/head/head_elf.glb',
   defaultOffset: { position: [0, 0.02, 0], rotation: [0, 0, 0], scale: 1 },
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -71,7 +71,7 @@ const legHuman: Part = {
   tags: [leftLegTag],
   meshFile: 'parts/left_leg/leg_human_base.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -156,12 +156,12 @@ describe('End-to-end: build a custom humanoid', () => {
     const renderDesc = buildRenderDescription(afterTexture, humanoidTemplate, library)
     expect(renderDesc.nodes).toHaveLength(3)
 
-    const headNode = renderDesc.nodes.find((n) => n.slotTag.value === 'head')
+    const headNode = renderDesc.nodes.find((node) => node.slotTag.value === 'head')
     expect(headNode?.meshFile).toBe('parts/head/head_elf.glb')
     // World transform: anchor [0, 1.6, 0] + part default [0, 0.02, 0] + instance [0, 0.05, 0]
     expect(headNode?.worldTransform.position[1]).toBeCloseTo(1.67)
 
-    const legNode = renderDesc.nodes.find((n) => n.slotTag.value === 'left_leg')
+    const legNode = renderDesc.nodes.find((node) => node.slotTag.value === 'left_leg')
     expect(legNode?.textures['diffuse']).toBe('textures/skin_dark.png')
 
     // 6. Save project and reload

@@ -3,9 +3,15 @@ import type { Transform } from './transform'
 
 export type TextureChannel = 'diffuse' | 'normal' | 'specular' | 'emissive'
 
+export type TextureVariant = {
+  readonly name: string
+  readonly textureId: TextureId
+}
+
 export type TextureSlot = {
   readonly channel: TextureChannel
   readonly defaultTextureId: TextureId | undefined
+  readonly variants: readonly TextureVariant[]
 }
 
 export type Part = {

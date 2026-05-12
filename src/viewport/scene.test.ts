@@ -15,13 +15,13 @@ describe('createScene', () => {
 
   it('includes ambient light', () => {
     const { scene } = createScene()
-    const ambient = scene.children.find((c) => c.type === 'AmbientLight')
+    const ambient = scene.children.find((child) => child.type === 'AmbientLight')
     expect(ambient).toBeDefined()
   })
 
   it('includes directional light', () => {
     const { scene } = createScene()
-    const directional = scene.children.find((c) => c.type === 'DirectionalLight')
+    const directional = scene.children.find((child) => child.type === 'DirectionalLight')
     expect(directional).toBeDefined()
   })
 })

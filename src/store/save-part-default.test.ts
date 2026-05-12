@@ -81,7 +81,7 @@ describe('Save as part default', () => {
     const state = store.getState()
     const renderDesc = buildRenderDescription(newInstance, humanoidTemplate, state.library)
 
-    const headNode = renderDesc.nodes.find((n) => n.slotTag.value === 'head')
+    const headNode = renderDesc.nodes.find((node) => node.slotTag.value === 'head')
     // anchor [0, 1.6, 0] + updated part default [0, 0.05, 0] + identity instance offset
     expect(headNode?.worldTransform.position[1]).toBeCloseTo(1.65)
   })

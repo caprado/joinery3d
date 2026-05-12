@@ -7,15 +7,15 @@ describe('pipe', () => {
   })
 
   it('applies a single function', () => {
-    expect(pipe(5, (n) => n * 2)).toBe(10)
+    expect(pipe(5, (value) => value * 2)).toBe(10)
   })
 
   it('applies functions left to right', () => {
     const result = pipe(
       5,
-      (n) => n * 2,
-      (n) => n + 1,
-      (n) => String(n),
+      (value) => value * 2,
+      (value) => value + 1,
+      (value) => String(value),
     )
     expect(result).toBe('11')
   })
@@ -23,8 +23,8 @@ describe('pipe', () => {
   it('works with type transformations across steps', () => {
     const result = pipe(
       'hello',
-      (s) => s.length,
-      (n) => n > 3,
+      (str) => str.length,
+      (value) => value > 3,
     )
     expect(result).toBe(true)
   })
@@ -32,11 +32,11 @@ describe('pipe', () => {
   it('supports up to five functions', () => {
     const result = pipe(
       1,
-      (n) => n + 1,
-      (n) => n + 1,
-      (n) => n + 1,
-      (n) => n + 1,
-      (n) => n + 1,
+      (value) => value + 1,
+      (value) => value + 1,
+      (value) => value + 1,
+      (value) => value + 1,
+      (value) => value + 1,
     )
     expect(result).toBe(6)
   })

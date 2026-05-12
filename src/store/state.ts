@@ -4,6 +4,7 @@ import type { LibraryIndex } from '../schema/library'
 import { emptyLibrary } from '../schema/library'
 import type { HistoryState } from '../core/history'
 import { emptyHistory } from '../core/history'
+import type { RecentProjectsList } from '../core/recent-projects'
 
 export type Selection = { readonly kind: 'none' } | { readonly kind: 'slot'; readonly slotTag: SlotTag }
 
@@ -39,6 +40,7 @@ export type AppState = {
   readonly editorOptions: EditorOptions
   readonly history: HistoryState<UndoableSnapshot>
   readonly dirty: boolean
+  readonly recentProjects: RecentProjectsList
 }
 
 export const initialState: AppState = {
@@ -62,4 +64,5 @@ export const initialState: AppState = {
   },
   history: emptyHistory(50),
   dirty: false,
+  recentProjects: [],
 }

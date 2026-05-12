@@ -118,7 +118,7 @@ describe('selectAvailablePartsForSelection', () => {
   it('returns parts matching the selected slot tag', () => {
     const result = selectAvailablePartsForSelection(stateWithSelection)
     expect(result).toHaveLength(2)
-    expect(result.map((p) => p.id.value).sort()).toStrictEqual(['head_elf', 'head_male_base'])
+    expect(result.map((part) => part.id.value).sort()).toStrictEqual(['head_elf', 'head_male_base'])
   })
 
   it('returns empty when nothing is selected', () => {

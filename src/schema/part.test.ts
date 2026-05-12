@@ -10,7 +10,7 @@ const testPart: Part = {
   tags: [slotTag('head')],
   meshFile: 'parts/head/head_male_base.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: textureId('skin_pale') }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: textureId('skin_pale'), variants: [] }],
   thumbnailFile: undefined,
 }
 

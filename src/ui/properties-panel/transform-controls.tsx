@@ -1,6 +1,6 @@
 import type { JSX } from 'preact'
 import type { Transform } from '../../schema/transform'
-import type { Vec3 } from '../../schema/vec'
+import { resolveScale, setVec3Component } from '../../schema/vec'
 import type { ToolMode } from '../../store/state'
 import { TransformAxisInput } from './transform-axis-input'
 import { Button } from '../common/button'
@@ -14,36 +14,27 @@ export type TransformControlsProps = {
   readonly onSaveAsPartDefault: () => void
 }
 
-const resolveScale = (scale: Vec3 | number): Vec3 =>
-  typeof scale === 'number' ? [scale, scale, scale] : scale
-
-const updateVec3 = (vec: Vec3, index: 0 | 1 | 2, value: number): Vec3 => [
-  index === 0 ? value : vec[0],
-  index === 1 ? value : vec[1],
-  index === 2 ? value : vec[2],
-]
-
 export const TransformControls = (props: TransformControlsProps): JSX.Element => {
   const scaleVec = resolveScale(props.offset.scale)
 
   const handlePositionChanged = (index: 0 | 1 | 2, value: number): void => {
     props.onOffsetChanged({
       ...props.offset,
-      position: updateVec3(props.offset.position, index, value),
+      position: setVec3Component(props.offset.position, index, value),
     })
   }
 
   const handleRotationChanged = (index: 0 | 1 | 2, value: number): void => {
     props.onOffsetChanged({
       ...props.offset,
-      rotation: updateVec3(props.offset.rotation, index, value),
+      rotation: setVec3Component(props.offset.rotation, index, value),
     })
   }
 
   const handleScaleChanged = (index: 0 | 1 | 2, value: number): void => {
     props.onOffsetChanged({
       ...props.offset,
-      scale: updateVec3(scaleVec, index, value),
+      scale: setVec3Component(scaleVec, index, value),
     })
   }
 
@@ -75,23 +66,59 @@ export const TransformControls = (props: TransformControlsProps): JSX.Element =>
 
       <fieldset class="transform-controls-group">
         <legend>Position</legend>
-        <TransformAxisInput axisLabel="X" axisValue={props.offset.position[0]} onAxisValueChanged={(v) => { handlePositionChanged(0, v) }} />
-        <TransformAxisInput axisLabel="Y" axisValue={props.offset.position[1]} onAxisValueChanged={(v) => { handlePositionChanged(1, v) }} />
-        <TransformAxisInput axisLabel="Z" axisValue={props.offset.position[2]} onAxisValueChanged={(v) => { handlePositionChanged(2, v) }} />
+        <TransformAxisInput 
+          axisLabel="X" 
+          axisValue={props.offset.position[0]} 
+          onAxisValueChanged={(value) => { handlePositionChanged(0, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Y" 
+          axisValue={props.offset.position[1]} 
+          onAxisValueChanged={(value) => { handlePositionChanged(1, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Z" 
+          axisValue={props.offset.position[2]} 
+          onAxisValueChanged={(value) => { handlePositionChanged(2, value) }}
+        />
       </fieldset>
 
       <fieldset class="transform-controls-group">
         <legend>Rotation</legend>
-        <TransformAxisInput axisLabel="X" axisValue={props.offset.rotation[0]} onAxisValueChanged={(v) => { handleRotationChanged(0, v) }} />
-        <TransformAxisInput axisLabel="Y" axisValue={props.offset.rotation[1]} onAxisValueChanged={(v) => { handleRotationChanged(1, v) }} />
-        <TransformAxisInput axisLabel="Z" axisValue={props.offset.rotation[2]} onAxisValueChanged={(v) => { handleRotationChanged(2, v) }} />
+        <TransformAxisInput 
+          axisLabel="X" 
+          axisValue={props.offset.rotation[0]} 
+          onAxisValueChanged={(value) => { handleRotationChanged(0, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Y" 
+          axisValue={props.offset.rotation[1]} 
+          onAxisValueChanged={(value) => { handleRotationChanged(1, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Z" 
+          axisValue={props.offset.rotation[2]} 
+          onAxisValueChanged={(value) => { handleRotationChanged(2, value) }}
+        />
       </fieldset>
 
       <fieldset class="transform-controls-group">
         <legend>Scale</legend>
-        <TransformAxisInput axisLabel="X" axisValue={scaleVec[0]} onAxisValueChanged={(v) => { handleScaleChanged(0, v) }} />
-        <TransformAxisInput axisLabel="Y" axisValue={scaleVec[1]} onAxisValueChanged={(v) => { handleScaleChanged(1, v) }} />
-        <TransformAxisInput axisLabel="Z" axisValue={scaleVec[2]} onAxisValueChanged={(v) => { handleScaleChanged(2, v) }} />
+        <TransformAxisInput 
+          axisLabel="X" 
+          axisValue={scaleVec[0]} 
+          onAxisValueChanged={(value) => { handleScaleChanged(0, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Y" 
+          axisValue={scaleVec[1]} 
+          onAxisValueChanged={(value) => { handleScaleChanged(1, value) }}
+        />
+        <TransformAxisInput 
+          axisLabel="Z" 
+          axisValue={scaleVec[2]} 
+          onAxisValueChanged={(value) => { handleScaleChanged(2, value) }}
+        />
       </fieldset>
 
       <div class="transform-controls-actions">

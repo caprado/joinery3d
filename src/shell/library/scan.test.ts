@@ -25,7 +25,7 @@ const sampleFiles: Record<string, string> = {
     tags: ['head'],
     meshFile: 'parts/head/head_male_base.glb',
     defaultOffset: { position: [0, 0, 0], rotation: [0, 0, 0], scale: 1 },
-    textureSlots: [{ channel: 'diffuse', defaultTextureId: 'skin_pale' }],
+    textureSlots: [{ channel: 'diffuse', defaultTextureId: 'skin_pale', variants: [] }],
     thumbnailFile: null,
   }),
   '/lib/parts/head/head_elf.json': JSON.stringify({

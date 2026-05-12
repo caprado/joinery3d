@@ -53,6 +53,7 @@ describe('schema roundtrip: Rust-serialized JSON validates in TypeScript', () =>
         {
           channel: 'diffuse',
           defaultTextureId: 'skin_pale',
+          variants: [],
         },
       ],
       thumbnailFile: null,

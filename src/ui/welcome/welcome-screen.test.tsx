@@ -34,7 +34,7 @@ describe('WelcomeScreen', () => {
       container,
     )
     const button = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Open Library Folder',
+      (button) => button.textContent === 'Open Library Folder',
     )
     button?.click()
     expect(onOpenLibrary).toHaveBeenCalledOnce()
@@ -48,7 +48,7 @@ describe('WelcomeScreen', () => {
       container,
     )
     const button = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Use Sample Library',
+      (button) => button.textContent === 'Use Sample Library',
     )
     button?.click()
     expect(onUseSampleLibrary).toHaveBeenCalledOnce()

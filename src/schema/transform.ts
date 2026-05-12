@@ -1,5 +1,5 @@
 import type { Vec3, EulerXYZ } from './vec'
-import { addVec3, mirrorXVec3 } from './vec'
+import { addVec3, mirrorXVec3, resolveScale } from './vec'
 
 export type Transform = {
   readonly position: Vec3
@@ -13,13 +13,10 @@ export const IDENTITY_TRANSFORM: Transform = {
   scale: 1,
 }
 
-const resolveScale = (scale: Vec3 | number): Vec3 =>
-  typeof scale === 'number' ? [scale, scale, scale] : scale
-
-const multiplyScales = (a: Vec3 | number, b: Vec3 | number): Vec3 => {
-  const sa = resolveScale(a)
-  const sb = resolveScale(b)
-  return [sa[0] * sb[0], sa[1] * sb[1], sa[2] * sb[2]]
+const multiplyScales = (left: Vec3 | number, right: Vec3 | number): Vec3 => {
+  const leftVec = resolveScale(left)
+  const rightVec = resolveScale(right)
+  return [leftVec[0] * rightVec[0], leftVec[1] * rightVec[1], leftVec[2] * rightVec[2]]
 }
 
 export const composeTransform = (base: Transform, offset: Transform): Transform => ({

@@ -1,7 +1,7 @@
 {
   "name": "joinery3d",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,7 @@
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
     "generate:schema": "cd src-tauri && TS_RS_EXPORT_DIR=../src/schema/generated cargo test",
+    "check:schema-sync": "bash scripts/check-schema-sync.sh",
     "prepare": "husky"
   },
   "dependencies": {

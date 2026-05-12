@@ -93,6 +93,6 @@ export const resolvePairedSlot = (
   template: Template,
   slotTagValue: SlotTag,
 ): SlotTag | undefined => {
-  const slot = template.slots.find((s) => s.tag.value === slotTagValue.value)
+  const slot = template.slots.find((slot) => slot.tag.value === slotTagValue.value)
   return slot?.pairedSlot
 }

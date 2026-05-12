@@ -22,6 +22,8 @@ import { setSelection } from './actions/set-selection'
 import { setToolMode } from './actions/set-tool-mode'
 import { toggleViewOption } from './actions/toggle-view-option'
 import { setEditorOption } from './actions/set-editor-option'
+import { updatePartMetadata } from './actions/update-part-metadata'
+import type { PartMetadataUpdate } from './actions/update-part-metadata'
 import { undo } from './actions/undo'
 import { redo } from './actions/redo'
 
@@ -45,8 +47,10 @@ export type StoreActions = {
   readonly setToolMode: (mode: ToolMode) => void
   readonly toggleViewOption: (option: keyof ViewOptions) => void
   readonly setEditorOption: (options: Partial<EditorOptions>) => void
+  readonly updatePartMetadata: (targetPartId: PartId, update: PartMetadataUpdate) => void
   readonly undo: () => void
   readonly redo: () => void
+  readonly setRecentProjects: (projects: readonly string[]) => void
 }
 
 export type Store = AppState & StoreActions
@@ -59,7 +63,7 @@ const takeSnapshot = (state: AppState): UndoableSnapshot => ({
 const withHistory = (
   state: AppState,
   label: string,
-  action: (s: AppState) => AppState,
+  action: (prevState: AppState) => AppState,
 ): AppState => {
   const stateWithHistory: AppState = {
     ...state,
@@ -87,22 +91,22 @@ export const createAppStore = () =>
       set((state) => instanceSaved(state, path))
     },
     instanceRenamed: (name) => {
-      set((state) => withHistory(state, 'Rename', (s) => instanceRenamed(s, name)))
+      set((state) => withHistory(state, 'Rename', (prevState) => instanceRenamed(prevState, name)))
     },
     setSlotPart: (slotTagValue, partIdValue) => {
-      set((state) => withHistory(state, 'Swap part', (s) => setSlotPart(s, slotTagValue, partIdValue)))
+      set((state) => withHistory(state, 'Swap part', (prevState) => setSlotPart(prevState, slotTagValue, partIdValue)))
     },
     setSlotOffset: (slotTagValue, offset) => {
-      set((state) => withHistory(state, 'Adjust offset', (s) => setSlotOffset(s, slotTagValue, offset)))
+      set((state) => withHistory(state, 'Adjust offset', (prevState) => setSlotOffset(prevState, slotTagValue, offset)))
     },
     resetSlotOffset: (slotTagValue) => {
-      set((state) => withHistory(state, 'Reset offset', (s) => resetSlotOffset(s, slotTagValue)))
+      set((state) => withHistory(state, 'Reset offset', (prevState) => resetSlotOffset(prevState, slotTagValue)))
     },
     setSlotTexture: (slotTagValue, channel, newTextureId) => {
-      set((state) => withHistory(state, 'Change texture', (s) => setSlotTexture(s, slotTagValue, channel, newTextureId)))
+      set((state) => withHistory(state, 'Change texture', (prevState) => setSlotTexture(prevState, slotTagValue, channel, newTextureId)))
     },
     savePartDefaultOffset: (targetPartId, offset) => {
-      set((state) => withHistory(state, 'Save part default', (s) => savePartDefaultOffset(s, targetPartId, offset)))
+      set((state) => withHistory(state, 'Save part default', (prevState) => savePartDefaultOffset(prevState, targetPartId, offset)))
     },
     setSelection: (selection) => {
       set((state) => setSelection(state, selection))
@@ -116,10 +120,16 @@ export const createAppStore = () =>
     setEditorOption: (options) => {
       set((state) => setEditorOption(state, options))
     },
+    updatePartMetadata: (targetPartId, update) => {
+      set((state) => updatePartMetadata(state, targetPartId, update))
+    },
     undo: () => {
       set((state) => undo(state))
     },
     redo: () => {
       set((state) => redo(state))
+    },
+    setRecentProjects: (projects) => {
+      set((state) => ({ ...state, recentProjects: projects }))
     },
   }))

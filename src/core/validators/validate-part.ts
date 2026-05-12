@@ -35,9 +35,20 @@ const validateTextureSlot = (
   const defaultTextureId =
     typeof rawDefaultTextureId === 'string' ? textureId(rawDefaultTextureId) : undefined
 
+  const rawVariants: unknown = value['variants']
+  const variants = Array.isArray(rawVariants)
+    ? Array.from({ length: rawVariants.length }, (_, index) => {
+        const entry: unknown = rawVariants[index]
+        if (!isRecord(entry)) return undefined
+        if (typeof entry['name'] !== 'string' || typeof entry['textureId'] !== 'string') return undefined
+        return { name: entry['name'], textureId: textureId(entry['textureId']) }
+      }).filter((entry): entry is { name: string; textureId: ReturnType<typeof textureId> } => entry !== undefined)
+    : []
+
   return ok({
     channel: channelResult.value,
     defaultTextureId,
+    variants,
   })
 }
 

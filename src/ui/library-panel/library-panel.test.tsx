@@ -18,7 +18,7 @@ const headPart: Part = {
   tags: [headTag],
   meshFile: 'parts/head/head_male_base.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: textureId('skin_pale') }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: textureId('skin_pale'), variants: [] }],
   thumbnailFile: undefined,
 }
 

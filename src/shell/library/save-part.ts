@@ -4,6 +4,7 @@ import type { Part } from '../../schema/part'
 type DiskTextureSlot = {
   readonly channel: string
   readonly defaultTextureId: string | null
+  readonly variants: readonly { readonly name: string; readonly textureId: string }[]
 }
 
 type DiskPart = {
@@ -29,6 +30,7 @@ const toDisk = (part: Part): DiskPart => ({
   textureSlots: part.textureSlots.map((slot) => ({
     channel: slot.channel,
     defaultTextureId: slot.defaultTextureId?.value ?? null,
+    variants: slot.variants.map((v) => ({ name: v.name, textureId: v.textureId.value })),
   })),
   thumbnailFile: part.thumbnailFile ?? null,
 })

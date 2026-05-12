@@ -111,7 +111,7 @@ describe('filterPartsByTag', () => {
   it('returns parts matching the given tag', () => {
     const heads = filterPartsByTag(index, headTag)
     expect(heads).toHaveLength(2)
-    expect(heads.map((p) => p.id.value).sort()).toStrictEqual(['head_elf', 'head_male_base'])
+    expect(heads.map((part) => part.id.value).sort()).toStrictEqual(['head_elf', 'head_male_base'])
   })
 
   it('returns a single part for a tag with one match', () => {
@@ -132,7 +132,7 @@ describe('searchPartsByName', () => {
   it('finds parts by case-insensitive partial match', () => {
     const results = searchPartsByName(index, 'male')
     expect(results).toHaveLength(2)
-    expect(results.map((p) => p.id.value).sort()).toStrictEqual([
+    expect(results.map((part) => part.id.value).sort()).toStrictEqual([
       'head_male_base',
       'torso_male_base',
     ])

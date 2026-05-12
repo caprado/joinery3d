@@ -115,7 +115,7 @@ describe('TransformControls', () => {
     const container = document.createElement('div')
     render(<TransformControls {...defaultProps} onResetOffset={onResetOffset} />, container)
     const resetButton = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Reset',
+      (button) => button.textContent === 'Reset',
     )
     resetButton?.click()
     expect(onResetOffset).toHaveBeenCalledOnce()
@@ -129,7 +129,7 @@ describe('TransformControls', () => {
       container,
     )
     const saveButton = Array.from(container.querySelectorAll('button')).find(
-      (b) => b.textContent === 'Save as Part Default',
+      (button) => button.textContent === 'Save as Part Default',
     )
     saveButton?.click()
     expect(onSaveAsPartDefault).toHaveBeenCalledOnce()

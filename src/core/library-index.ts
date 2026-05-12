@@ -10,15 +10,15 @@ export const buildIndexFromParts = (
   textures: readonly Texture[],
 ): LibraryIndex => {
   const templatesRecord: Record<string, Template> = Object.fromEntries(
-    templates.map((t) => [t.id.value, t]),
+    templates.map((template) => [template.id.value, template]),
   )
 
   const partsRecord: Record<string, Part> = Object.fromEntries(
-    parts.map((p) => [p.id.value, p]),
+    parts.map((part) => [part.id.value, part]),
   )
 
   const texturesRecord: Record<string, Texture> = Object.fromEntries(
-    textures.map((t) => [t.id.value, t]),
+    textures.map((texture) => [texture.id.value, texture]),
   )
 
   const partsByTag: Record<string, readonly PartId[]> = parts.reduce<

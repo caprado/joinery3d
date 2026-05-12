@@ -7,11 +7,28 @@ export const VEC3_ONE: Vec3 = [1, 1, 1]
 
 export const vec3 = (x: number, y: number, z: number): Vec3 => [x, y, z]
 
-export const addVec3 = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
+export const addVec3 = (left: Vec3, right: Vec3): Vec3 => [
+  left[0] + right[0],
+  left[1] + right[1],
+  left[2] + right[2],
+]
 
-export const scaleVec3 = (v: Vec3, s: number): Vec3 => [v[0] * s, v[1] * s, v[2] * s]
+export const scaleVec3 = (vec: Vec3, scalar: number): Vec3 => [
+  vec[0] * scalar,
+  vec[1] * scalar,
+  vec[2] * scalar,
+]
 
-export const mirrorXVec3 = (v: Vec3): Vec3 => [-v[0], v[1], v[2]]
+export const mirrorXVec3 = (vec: Vec3): Vec3 => [-vec[0], vec[1], vec[2]]
+
+export const setVec3Component = (vec: Vec3, index: 0 | 1 | 2, value: number): Vec3 => [
+  index === 0 ? value : vec[0],
+  index === 1 ? value : vec[1],
+  index === 2 ? value : vec[2],
+]
+
+export const resolveScale = (scale: Vec3 | number): Vec3 =>
+  typeof scale === 'number' ? [scale, scale, scale] : scale
 
 const isFiniteNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value)

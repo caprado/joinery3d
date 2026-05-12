@@ -36,7 +36,7 @@ const resolveHandle = async (
   rootHandle: FileSystemDirectoryHandle,
   path: string,
 ): Promise<FileSystemFileHandle> => {
-  const segments = path.split('/').filter((s) => s.length > 0)
+  const segments = path.split('/').filter((segment) => segment.length > 0)
   const fileName = segments[segments.length - 1]
   if (fileName === undefined) throw new Error(`Invalid path: ${path}`)
 
@@ -131,7 +131,7 @@ export const createWebAdapter = (): FsAdapter => {
       if (relativePath.length === 0) {
         return collectFiles(handle, '')
       }
-      const segments = relativePath.split('/').filter((s) => s.length > 0)
+      const segments = relativePath.split('/').filter((segment) => segment.length > 0)
       const subDir = await segments.reduce<Promise<FileSystemDirectoryHandle>>(
         async (acc, segment) => {
           const dir = await acc

@@ -13,7 +13,7 @@ const headPart: Part = {
   tags: [headTag],
   meshFile: 'parts/head/head_male_base.glb',
   defaultOffset: { position: [0, 0.05, 0], rotation: [0, 0, 0], scale: 1 },
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinPaleId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -77,7 +77,7 @@ describe('savePartMetadata', () => {
   it('serializes texture slots with null for missing defaultTextureId', async () => {
     const partNoTexture: Part = {
       ...headPart,
-      textureSlots: [{ channel: 'diffuse', defaultTextureId: undefined }],
+      textureSlots: [{ channel: 'diffuse', defaultTextureId: undefined, variants: [] }],
     }
 
     const written = new Map<string, string>()

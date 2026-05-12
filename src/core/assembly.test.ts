@@ -33,7 +33,7 @@ const headPart: Part = {
   tags: [headTag],
   meshFile: 'parts/head/head_male_base.glb',
   defaultOffset: IDENTITY_TRANSFORM,
-  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinTextureId }],
+  textureSlots: [{ channel: 'diffuse', defaultTextureId: skinTextureId, variants: [] }],
   thumbnailFile: undefined,
 }
 
@@ -178,7 +178,7 @@ describe('buildRenderDescription', () => {
     }
 
     const result = buildRenderDescription(instance, humanoidTemplate, library)
-    const torsoNode = result.nodes.find((n) => n.slotTag.value === 'torso')
+    const torsoNode = result.nodes.find((node) => node.slotTag.value === 'torso')
     expect(torsoNode).toBeDefined()
 
     // anchor: [0, 1.0, 0] + part default: [0, -0.1, 0] + instance: [0, 0.02, 0]
@@ -199,7 +199,7 @@ describe('buildRenderDescription', () => {
     }
 
     const result = buildRenderDescription(instance, humanoidTemplate, library)
-    const headNode = result.nodes.find((n) => n.slotTag.value === 'head')
+    const headNode = result.nodes.find((node) => node.slotTag.value === 'head')
     expect(headNode?.textures['diffuse']).toBe('textures/skin_pale.png')
   })
 
@@ -250,7 +250,7 @@ describe('buildRenderDescription', () => {
     const result = buildRenderDescription(instance, chestTemplate, library)
     expect(result.nodes).toHaveLength(2)
 
-    const lidNode = result.nodes.find((n) => n.slotTag.value === 'lid')
+    const lidNode = result.nodes.find((node) => node.slotTag.value === 'lid')
     // anchor: [0, 0.25, -0.3] + part default: [0, 0.05, 0] + instance: identity
     expect(lidNode?.worldTransform.position[0]).toBeCloseTo(0)
     expect(lidNode?.worldTransform.position[1]).toBeCloseTo(0.3)
