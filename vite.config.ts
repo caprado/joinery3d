@@ -4,6 +4,7 @@ import preact from '@preact/preset-vite'
 const host = process.env.TAURI_DEV_HOST
 
 export default defineConfig(async () => ({
+  base: process.env.BASE_URL ?? '/',
   plugins: [preact()],
   resolve: {
     alias: {
