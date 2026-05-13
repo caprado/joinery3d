@@ -1,4 +1,5 @@
 import './app.css'
+import './animations/transitions.css'
 
 export const App = () => {
   return (

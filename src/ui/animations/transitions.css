@@ -1,0 +1,71 @@
+/* Hover and focus transitions for interactive elements */
+
+.button {
+  transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
+}
+
+.button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.slot-list-item-button {
+  transition: background-color 0.15s ease;
+}
+
+.slot-list-item--selected .slot-list-item-button {
+  transition: background-color 0.2s ease;
+}
+
+.library-part-item-button {
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.library-part-item-button:hover {
+  transform: translateY(-1px);
+}
+
+.texture-grid-item {
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.texture-grid-item:hover {
+  transform: scale(1.03);
+}
+
+.tool-button {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.modal-overlay {
+  transition: opacity 0.2s ease;
+}
+
+.modal-content {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.texture-drawer {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.variant-selector-item {
+  transition: background-color 0.15s ease;
+}
+
+.texture-painter-tool {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Focus visible styles */
+.button:focus-visible,
+.tool-button:focus-visible,
+.slot-list-item-button:focus-visible,
+.library-part-item-button:focus-visible,
+.texture-grid-item:focus-visible {
+  outline: 2px solid #6496ff;
+  outline-offset: 2px;
+}
