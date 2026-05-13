@@ -13,13 +13,38 @@ export const createTauriAdapter = (): FsAdapter => ({
     return selected
   },
 
-  readTextFile: (path) => invoke<string>('read_text_file', { path }),
+  pickFile: async (extensions) => {
+    const selected = await open({
+      directory: false,
+      multiple: false,
+      filters: [{ name: 'Files', extensions: [...extensions] }],
+    })
+    if (selected === null) return undefined
+    if (Array.isArray(selected)) {
+      const first: unknown = selected[0]
+      return typeof first === 'string' ? first : undefined
+    }
+    return selected
+  },
+
+  readTextFile: async (path) => {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      const response = await fetch(path)
+      return response.text()
+    }
+    return invoke<string>('read_text_file', { path })
+  },
 
   writeTextFile: async (path, content) => {
     await invoke('write_text_file', { path, content })
   },
 
   readBinaryFile: async (path) => {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      const response = await fetch(path)
+      const buffer = await response.arrayBuffer()
+      return new Uint8Array(buffer)
+    }
     const data = await invoke<number[]>('read_binary_file', { path })
     return new Uint8Array(data)
   },

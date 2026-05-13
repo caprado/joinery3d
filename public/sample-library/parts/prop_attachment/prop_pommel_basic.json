@@ -1,0 +1,23 @@
+{
+  "id": "prop_pommel_basic",
+  "name": "Basic Pommel",
+  "tags": [
+    "prop_attachment"
+  ],
+  "meshFile": "parts/prop_attachment/prop_pommel_basic.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [],
+  "thumbnailFile": null
+}

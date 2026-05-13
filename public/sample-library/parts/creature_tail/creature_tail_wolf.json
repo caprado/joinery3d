@@ -1,0 +1,23 @@
+{
+  "id": "creature_tail_wolf",
+  "name": "Wolf Tail",
+  "tags": [
+    "creature_tail"
+  ],
+  "meshFile": "parts/creature_tail/creature_tail_wolf.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [],
+  "thumbnailFile": null
+}

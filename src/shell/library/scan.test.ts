@@ -61,6 +61,7 @@ const fileList = [
 
 const mockAdapter: FsAdapter = {
   pickFolder: () => Promise.resolve(undefined),
+  pickFile: () => Promise.resolve(undefined),
   readTextFile: (path) => {
     const content = sampleFiles[path]
     if (content === undefined) return Promise.reject(new Error(`File not found: ${path}`))

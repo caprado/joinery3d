@@ -22,6 +22,7 @@ describe('savePartMetadata', () => {
     const written = new Map<string, string>()
     const adapter: FsAdapter = {
       pickFolder: () => Promise.resolve(undefined),
+      pickFile: () => Promise.resolve(undefined),
       readTextFile: () => Promise.resolve(''),
       writeTextFile: (path, content) => {
         written.set(path, content)
@@ -54,6 +55,7 @@ describe('savePartMetadata', () => {
     const written = new Map<string, string>()
     const adapter: FsAdapter = {
       pickFolder: () => Promise.resolve(undefined),
+      pickFile: () => Promise.resolve(undefined),
       readTextFile: () => Promise.resolve(''),
       writeTextFile: (path, content) => {
         written.set(path, content)
@@ -83,6 +85,7 @@ describe('savePartMetadata', () => {
     const written = new Map<string, string>()
     const adapter: FsAdapter = {
       pickFolder: () => Promise.resolve(undefined),
+      pickFile: () => Promise.resolve(undefined),
       readTextFile: () => Promise.resolve(''),
       writeTextFile: (path, content) => {
         written.set(path, content)

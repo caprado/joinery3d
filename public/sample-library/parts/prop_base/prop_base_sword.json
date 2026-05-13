@@ -1,0 +1,29 @@
+{
+  "id": "prop_base_sword",
+  "name": "Sword Blade",
+  "tags": [
+    "prop_base"
+  ],
+  "meshFile": "parts/prop_base/prop_base_sword.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "metal_dark",
+      "variants": []
+    }
+  ],
+  "thumbnailFile": null
+}

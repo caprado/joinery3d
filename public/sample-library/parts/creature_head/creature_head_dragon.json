@@ -1,0 +1,29 @@
+{
+  "id": "creature_head_dragon",
+  "name": "Dragon Head",
+  "tags": [
+    "creature_head"
+  ],
+  "meshFile": "parts/creature_head/creature_head_dragon.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "metal_dark",
+      "variants": []
+    }
+  ],
+  "thumbnailFile": null
+}

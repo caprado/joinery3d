@@ -1,4 +1,5 @@
 import {
+  DoubleSide,
   ShaderMaterial,
   UniformsUtils,
   UniformsLib,
@@ -11,32 +12,36 @@ import {
 export type Ps1EffectsConfig = {
   readonly screenResolution: readonly [number, number]
   readonly isEnabled: boolean
+  readonly brightness: number
 }
 
 export const DEFAULT_PS1_CONFIG: Ps1EffectsConfig = {
   screenResolution: [320, 240],
   isEnabled: false,
+  brightness: 1.0,
 }
 
 const ps1VertexShader = `
   uniform vec2 screenResolution;
 
   varying vec2 vUv;
-  varying float vAffineW;
+  varying vec3 vWorldNormal;
+  varying vec3 vViewDir;
 
   void main() {
     vUv = uv;
+    vWorldNormal = normalize(normalMatrix * normal);
 
-    vec4 clipPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+    vViewDir = normalize(-mvPos.xyz);
 
-    // Vertex snapping: snap to screen-space grid
+    vec4 clipPos = projectionMatrix * mvPos;
+
+    // Vertex snapping: snap XY to screen-space grid, preserve Z depth
     vec2 snapped = floor(clipPos.xy / clipPos.w * screenResolution * 0.5 + 0.5)
                    / (screenResolution * 0.5) * clipPos.w;
-    clipPos.xy = snapped;
-
-    // Pass W for affine correction removal
-    vAffineW = clipPos.w;
-    vUv *= clipPos.w;
+    clipPos.x = snapped.x;
+    clipPos.y = snapped.y;
 
     gl_Position = clipPos;
   }
@@ -44,23 +49,51 @@ const ps1VertexShader = `
 
 const ps1FragmentShader = `
   uniform sampler2D map;
+  uniform bool hasMap;
   uniform vec3 diffuse;
   uniform float opacity;
+  uniform float brightness;
 
   varying vec2 vUv;
-  varying float vAffineW;
+  varying vec3 vWorldNormal;
+  varying vec3 vViewDir;
 
   void main() {
-    // Affine texture mapping: divide by W to undo perspective correction
-    vec2 affineUv = vUv / vAffineW;
-    vec4 texColor = texture2D(map, affineUv);
-    gl_FragColor = vec4(texColor.rgb * diffuse, texColor.a * opacity);
+    vec3 normal = normalize(vWorldNormal);
+    vec3 viewDir = normalize(vViewDir);
+
+    // Lighting: key + fill + ambient
+    vec3 keyDir = normalize(vec3(0.5, 1.0, 0.7));
+    vec3 fillDir = normalize(vec3(-0.5, 0.3, -0.5));
+    float keyNdotL = max(dot(normal, keyDir), 0.0);
+    float fillNdotL = max(dot(normal, fillDir), 0.0);
+    vec3 lighting = vec3(0.4) + vec3(0.5) * keyNdotL + vec3(0.2) * fillNdotL;
+
+    // Edge darkening: faces at grazing angles get darker (shows depth)
+    float edgeFactor = max(dot(normal, viewDir), 0.0);
+    float edgeDarken = mix(0.3, 1.0, edgeFactor);
+
+    lighting *= edgeDarken * brightness;
+
+    vec3 baseColor;
+    float alpha;
+    if (hasMap) {
+      vec4 texColor = texture2D(map, vUv);
+      baseColor = texColor.rgb * diffuse;
+      alpha = texColor.a * opacity;
+    } else {
+      baseColor = diffuse;
+      alpha = opacity;
+    }
+
+    gl_FragColor = vec4(baseColor * lighting, alpha);
   }
 `
 
 export type CreatePs1MaterialArgs = {
   readonly texture: Texture | undefined
   readonly screenResolution: readonly [number, number]
+  readonly brightness: number
 }
 
 export const createPs1Material = (args: CreatePs1MaterialArgs): ShaderMaterial => {
@@ -68,6 +101,8 @@ export const createPs1Material = (args: CreatePs1MaterialArgs): ShaderMaterial =
     UniformsLib.common,
     {
       screenResolution: { value: [args.screenResolution[0], args.screenResolution[1]] },
+      brightness: { value: args.brightness },
+      hasMap: { value: args.texture !== undefined },
     },
   ])
 
@@ -79,6 +114,9 @@ export const createPs1Material = (args: CreatePs1MaterialArgs): ShaderMaterial =
     uniforms,
     vertexShader: ps1VertexShader,
     fragmentShader: ps1FragmentShader,
+    depthTest: true,
+    depthWrite: true,
+    side: DoubleSide,
   })
 }
 
@@ -93,7 +131,21 @@ export const applyPs1MaterialToObject = (
     child.material = createPs1Material({
       texture,
       screenResolution: config.screenResolution,
+      brightness: config.brightness,
     })
+  })
+}
+
+export const updatePs1Brightness = (object: Object3D, brightness: number): void => {
+  object.traverse((child) => {
+    if (!('material' in child)) return
+    const material: unknown = child.material
+    if (material instanceof ShaderMaterial) {
+      const uniform = material.uniforms['brightness']
+      if (uniform !== undefined) {
+        uniform.value = brightness
+      }
+    }
   })
 }
 

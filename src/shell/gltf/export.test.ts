@@ -65,6 +65,7 @@ const sampleGlb = createMinimalGlb()
 
 const mockAdapter: FsAdapter = {
   pickFolder: () => Promise.resolve(undefined),
+  pickFile: () => Promise.resolve(undefined),
   readTextFile: () => Promise.resolve(''),
   writeTextFile: () => Promise.resolve(),
   readBinaryFile: (path) => {

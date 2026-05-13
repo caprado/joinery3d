@@ -1,0 +1,23 @@
+{
+  "id": "creature_body_bear",
+  "name": "Bear Body",
+  "tags": [
+    "creature_body"
+  ],
+  "meshFile": "parts/creature_body/creature_body_bear.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [],
+  "thumbnailFile": null
+}

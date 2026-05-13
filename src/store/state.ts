@@ -10,10 +10,16 @@ export type Selection = { readonly kind: 'none' } | { readonly kind: 'slot'; rea
 
 export type ToolMode = 'translate' | 'rotate' | 'scale'
 
+export type BackgroundMode =
+  | { readonly kind: 'solid'; readonly color: string }
+  | { readonly kind: 'gradient'; readonly topColor: string; readonly bottomColor: string }
+
 export type ViewOptions = {
   readonly showGrid: boolean
   readonly ps1Effects: boolean
   readonly wireframe: boolean
+  readonly brightness: number
+  readonly background: BackgroundMode
 }
 
 export type EditorOptions = {
@@ -54,6 +60,8 @@ export const initialState: AppState = {
     showGrid: true,
     ps1Effects: false,
     wireframe: false,
+    brightness: 1.0,
+    background: { kind: 'solid', color: '#1a1a1a' },
   },
   editorOptions: {
     snapEnabled: false,

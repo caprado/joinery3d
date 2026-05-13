@@ -1,4 +1,4 @@
-import { Group, Object3D, Scene } from 'three'
+import { BufferGeometry, DoubleSide, Group, Mesh, MeshStandardMaterial, Object3D, Scene } from 'three'
 import type { RenderDescription, RenderNode } from '../core/assembly'
 import { loadGlb } from '../shell/gltf/load'
 import type { FsAdapter } from '../shell/fs/adapter'
@@ -44,6 +44,17 @@ export const createAssemblyRenderer = (scene: Scene): AssemblyRenderer => {
     const group = loaded.scene
     group.name = renderNode.slotTag.value
     group.userData = { slotTag: renderNode.slotTag.value }
+
+    group.traverse((child) => {
+      if (child instanceof Mesh) {
+        if (child.geometry instanceof BufferGeometry && child.geometry.getAttribute('normal') === undefined) {
+          child.geometry.computeVertexNormals()
+        }
+        if (child.material instanceof MeshStandardMaterial) {
+          child.material.side = DoubleSide
+        }
+      }
+    })
 
     group.position.set(
       renderNode.worldTransform.position[0],

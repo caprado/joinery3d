@@ -1,0 +1,29 @@
+{
+  "id": "creature_head_bear",
+  "name": "Bear Head",
+  "tags": [
+    "creature_head"
+  ],
+  "meshFile": "parts/creature_head/creature_head_bear.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "wood_dark",
+      "variants": []
+    }
+  ],
+  "thumbnailFile": null
+}

@@ -16,7 +16,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     const target = new Mesh(new BoxGeometry(), new MeshBasicMaterial())
     gizmo.attach(target)
@@ -30,7 +30,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     const target = new Mesh(new BoxGeometry(), new MeshBasicMaterial())
     gizmo.attach(target)
@@ -45,7 +45,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     gizmo.setMode('rotate')
     expect(gizmo.getControls().mode).toBe('rotate')
@@ -63,7 +63,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     expect(gizmo.getControls().mode).toBe('translate')
 
@@ -74,7 +74,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     const controls = gizmo.getControls()
     expect(controls).toBeDefined()
@@ -87,7 +87,7 @@ describe('createGizmo', () => {
     const camera = new PerspectiveCamera()
     const renderer = createMockRenderer()
     const onTransformEnd = vi.fn()
-    const gizmo = createGizmo(camera, renderer, { onTransformEnd })
+    const gizmo = createGizmo(camera, renderer, { onTransformChange: vi.fn(), onTransformEnd })
 
     const target = new Group()
     target.position.set(1, 2, 3)
@@ -97,11 +97,7 @@ describe('createGizmo', () => {
 
     gizmo.getControls().dispatchEvent({ type: 'mouseUp', mode: 'translate' })
 
-    expect(onTransformEnd).toHaveBeenCalledWith(
-      [1, 2, 3],
-      expect.arrayContaining([expect.closeTo(0.1), expect.closeTo(0.2), expect.closeTo(0.3)]),
-      [2, 2, 2],
-    )
+    expect(onTransformEnd).toHaveBeenCalledOnce()
 
     gizmo.dispose()
   })

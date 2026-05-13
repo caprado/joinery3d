@@ -1,0 +1,29 @@
+{
+  "id": "prop_base_staff",
+  "name": "Staff",
+  "tags": [
+    "prop_base"
+  ],
+  "meshFile": "parts/prop_base/prop_base_staff.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "wood_dark",
+      "variants": []
+    }
+  ],
+  "thumbnailFile": null
+}

@@ -3,26 +3,49 @@
  */
 import { describe, it, expect } from 'vitest'
 import { render } from 'preact'
+import { createAppStore } from '../store/store'
+import type { FsAdapter } from '../shell/fs/adapter'
 import { App } from './app'
 
-describe('App', () => {
-  it('renders the top-level layout', () => {
-    const container = document.createElement('div')
-    render(<App />, container)
+const mockAdapter: FsAdapter = {
+  pickFolder: () => Promise.resolve(undefined),
+  pickFile: () => Promise.resolve(undefined),
+  readTextFile: () => Promise.resolve(''),
+  writeTextFile: () => Promise.resolve(),
+  readBinaryFile: () => Promise.resolve(new Uint8Array()),
+  writeBinaryFile: () => Promise.resolve(),
+  listFiles: () => Promise.resolve([]),
+  watchFolder: () => () => undefined,
+}
 
-    expect(container.querySelector('.app')).not.toBeNull()
-    expect(container.querySelector('.app-topbar')).not.toBeNull()
-    expect(container.querySelector('.app-main')).not.toBeNull()
-    expect(container.querySelector('.app-sidebar-left')).not.toBeNull()
-    expect(container.querySelector('.app-viewport')).not.toBeNull()
-    expect(container.querySelector('.app-sidebar-right')).not.toBeNull()
+describe('App', () => {
+  it('renders the welcome screen when no library is loaded', () => {
+    const store = createAppStore()
+    const container = document.createElement('div')
+    render(
+      <App
+        store={store}
+        adapter={mockAdapter}
+      />,
+      container,
+    )
+
+    expect(container.textContent).toContain('Joinery3D')
+    expect(container.querySelector('.welcome-screen')).not.toBeNull()
   })
 
-  it('displays the app name in the topbar', () => {
+  it('renders the welcome screen actions', () => {
+    const store = createAppStore()
     const container = document.createElement('div')
-    render(<App />, container)
+    render(
+      <App
+        store={store}
+        adapter={mockAdapter}
+      />,
+      container,
+    )
 
-    const topbar = container.querySelector('.app-topbar')
-    expect(topbar?.textContent).toContain('Joinery3D')
+    expect(container.textContent).toContain('Open Library Folder')
+    expect(container.textContent).toContain('Use Sample Library')
   })
 })

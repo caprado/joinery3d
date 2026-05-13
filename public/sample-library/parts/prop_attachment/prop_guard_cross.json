@@ -1,0 +1,29 @@
+{
+  "id": "prop_guard_cross",
+  "name": "Cross Guard",
+  "tags": [
+    "prop_attachment"
+  ],
+  "meshFile": "parts/prop_attachment/prop_guard_cross.glb",
+  "defaultOffset": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": 1
+  },
+  "textureSlots": [
+    {
+      "channel": "diffuse",
+      "defaultTextureId": "metal_dark",
+      "variants": []
+    }
+  ],
+  "thumbnailFile": null
+}

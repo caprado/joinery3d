@@ -1,0 +1,32 @@
+{
+  "id": "prop",
+  "name": "Prop",
+  "description": "Handheld item with base and attachment point",
+  "version": 1,
+  "slots": [
+    {
+      "tag": "prop_base",
+      "name": "Base",
+      "anchor": {
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "prop_base_sword",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "prop_attachment",
+      "name": "Attachment",
+      "anchor": {
+        "position": [0, -0.4, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "prop_guard_cross",
+      "pairedSlot": null,
+      "required": false
+    }
+  ]
+}

@@ -7,13 +7,24 @@ import { Topbar } from './topbar'
 
 const defaultProps = {
   onNewAsset: vi.fn(),
+  onOpenProject: vi.fn(),
+  onCloseProject: vi.fn(),
   onSave: vi.fn(),
   onSaveAs: vi.fn(),
   onExport: vi.fn(),
+  onUndo: vi.fn(),
+  onRedo: vi.fn(),
   hasInstance: false,
   isDirty: false,
   hasProjectPath: false,
+  canUndo: false,
+  canRedo: false,
 }
+
+const findButton = (container: HTMLElement, label: string): HTMLButtonElement | undefined =>
+  Array.from(container.querySelectorAll('button')).find(
+    (button) => button.textContent === label,
+  )
 
 describe('Topbar', () => {
   it('renders the app title', () => {
@@ -25,30 +36,28 @@ describe('Topbar', () => {
   it('renders all action buttons', () => {
     const container = document.createElement('div')
     render(<Topbar {...defaultProps} />, container)
-    const buttons = container.querySelectorAll('button')
-    expect(buttons.length).toBe(4)
+    expect(findButton(container, 'New Asset')).toBeDefined()
+    expect(findButton(container, 'Open')).toBeDefined()
+    expect(findButton(container, 'Save')).toBeDefined()
+    expect(findButton(container, 'Save As')).toBeDefined()
+    expect(findButton(container, 'Export GLB')).toBeDefined()
+    expect(findButton(container, 'Undo')).toBeDefined()
+    expect(findButton(container, 'Redo')).toBeDefined()
   })
 
   it('disables Save, Save As, and Export when no instance exists', () => {
     const container = document.createElement('div')
     render(<Topbar {...defaultProps} />, container)
-    const buttons = container.querySelectorAll('button')
-    const saveButton = buttons[1]
-    const saveAsButton = buttons[2]
-    const exportButton = buttons[3]
-    expect(saveButton?.disabled).toBe(true)
-    expect(saveAsButton?.disabled).toBe(true)
-    expect(exportButton?.disabled).toBe(true)
+    expect(findButton(container, 'Save')?.disabled).toBe(true)
+    expect(findButton(container, 'Save As')?.disabled).toBe(true)
+    expect(findButton(container, 'Export GLB')?.disabled).toBe(true)
   })
 
   it('enables Save As and Export when an instance exists', () => {
     const container = document.createElement('div')
     render(<Topbar {...defaultProps} hasInstance={true} />, container)
-    const buttons = container.querySelectorAll('button')
-    const saveAsButton = buttons[2]
-    const exportButton = buttons[3]
-    expect(saveAsButton?.disabled).toBe(false)
-    expect(exportButton?.disabled).toBe(false)
+    expect(findButton(container, 'Save As')?.disabled).toBe(false)
+    expect(findButton(container, 'Export GLB')?.disabled).toBe(false)
   })
 
   it('enables Save only when dirty with a project path', () => {
@@ -57,25 +66,33 @@ describe('Topbar', () => {
       <Topbar {...defaultProps} hasInstance={true} isDirty={true} hasProjectPath={true} />,
       container,
     )
-    const buttons = container.querySelectorAll('button')
-    const saveButton = buttons[1]
-    expect(saveButton?.disabled).toBe(false)
+    expect(findButton(container, 'Save')?.disabled).toBe(false)
   })
 
   it('keeps Save disabled when dirty but no project path', () => {
     const container = document.createElement('div')
     render(<Topbar {...defaultProps} hasInstance={true} isDirty={true} />, container)
-    const buttons = container.querySelectorAll('button')
-    const saveButton = buttons[1]
-    expect(saveButton?.disabled).toBe(true)
+    expect(findButton(container, 'Save')?.disabled).toBe(true)
+  })
+
+  it('disables Undo/Redo when history is empty', () => {
+    const container = document.createElement('div')
+    render(<Topbar {...defaultProps} />, container)
+    expect(findButton(container, 'Undo')?.disabled).toBe(true)
+    expect(findButton(container, 'Redo')?.disabled).toBe(true)
+  })
+
+  it('enables Undo when canUndo is true', () => {
+    const container = document.createElement('div')
+    render(<Topbar {...defaultProps} canUndo={true} />, container)
+    expect(findButton(container, 'Undo')?.disabled).toBe(false)
   })
 
   it('calls onNewAsset when New Asset is clicked', () => {
     const onNewAsset = vi.fn()
     const container = document.createElement('div')
     render(<Topbar {...defaultProps} onNewAsset={onNewAsset} />, container)
-    const buttons = container.querySelectorAll('button')
-    buttons[0]?.click()
+    findButton(container, 'New Asset')?.click()
     expect(onNewAsset).toHaveBeenCalledOnce()
   })
 
@@ -92,8 +109,7 @@ describe('Topbar', () => {
       />,
       container,
     )
-    const buttons = container.querySelectorAll('button')
-    buttons[1]?.click()
+    findButton(container, 'Save')?.click()
     expect(onSave).toHaveBeenCalledOnce()
   })
 })

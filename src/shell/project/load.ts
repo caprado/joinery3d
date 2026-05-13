@@ -3,6 +3,7 @@ import type { FsAdapter } from '../fs/adapter'
 import type { AssetInstance } from '../../schema/instance'
 import type { ValidationError } from '../../schema/validation-error'
 import { validateInstance } from '../../core/validators/validate-instance'
+import { migrateProject } from '../../core/migrate-project'
 import { err } from '../../core/fp/result'
 
 export const loadProject = async (
@@ -18,5 +19,6 @@ export const loadProject = async (
     return err({ path, message: 'Invalid JSON', received: content.slice(0, 100) })
   }
 
-  return validateInstance(parsed, path)
+  const migrated = migrateProject(parsed)
+  return validateInstance(migrated, path)
 }

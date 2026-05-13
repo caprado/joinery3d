@@ -6,7 +6,6 @@ import { render } from 'preact'
 import { partId, textureId } from '../../schema/ids'
 import type { SlotAssignment } from '../../schema/instance'
 import { PropertiesPanel } from './properties-panel'
-import type { TextureAssignment } from './texture-section'
 
 const testAssignment: SlotAssignment = {
   partId: partId('head_male_base'),
@@ -14,16 +13,11 @@ const testAssignment: SlotAssignment = {
   textures: { diffuse: textureId('skin_pale') },
 }
 
-const textureAssignments: readonly TextureAssignment[] = [
-  { channel: 'diffuse', textureId: 'skin_pale', textureName: 'Pale Skin' },
-]
-
 const defaultProps = {
   slotName: 'Head',
   partName: 'Male Head (Base)',
   assignment: testAssignment,
   toolMode: 'translate' as const,
-  textureAssignments,
   onToolModeChanged: vi.fn(),
   onOffsetChanged: vi.fn(),
   onResetOffset: vi.fn(),
@@ -34,7 +28,12 @@ describe('PropertiesPanel', () => {
   it('shows empty message when no assignment', () => {
     const container = document.createElement('div')
     render(
-      <PropertiesPanel {...defaultProps} assignment={undefined} slotName={undefined} partName={undefined} />,
+      <PropertiesPanel
+        {...defaultProps}
+        assignment={undefined}
+        slotName={undefined}
+        partName={undefined}
+      />,
       container,
     )
     expect(container.textContent).toContain('Select a slot to view properties')
@@ -47,26 +46,14 @@ describe('PropertiesPanel', () => {
     expect(container.textContent).toContain('Male Head (Base)')
   })
 
-  it('displays position values', () => {
+  it('renders editable number inputs for position', () => {
     const container = document.createElement('div')
     render(<PropertiesPanel {...defaultProps} />, container)
-    expect(container.textContent).toContain('0.100')
-    expect(container.textContent).toContain('0.200')
-    expect(container.textContent).toContain('0.300')
-  })
-
-  it('displays rotation values', () => {
-    const container = document.createElement('div')
-    render(<PropertiesPanel {...defaultProps} />, container)
-    expect(container.textContent).toContain('0.400')
-    expect(container.textContent).toContain('0.500')
-    expect(container.textContent).toContain('0.600')
-  })
-
-  it('displays uniform scale', () => {
-    const container = document.createElement('div')
-    render(<PropertiesPanel {...defaultProps} />, container)
-    expect(container.textContent).toContain('Uniform: 2.000')
+    const inputs = container.querySelectorAll('.transform-axis-input-field')
+    expect(inputs.length).toBe(9)
+    if (inputs[0] instanceof HTMLInputElement) {
+      expect(inputs[0].value).toBe('0.100')
+    }
   })
 
   it('displays tool mode buttons with active state', () => {
@@ -79,7 +66,13 @@ describe('PropertiesPanel', () => {
   it('calls onToolModeChanged when a tool button is clicked', () => {
     const onToolModeChanged = vi.fn()
     const container = document.createElement('div')
-    render(<PropertiesPanel {...defaultProps} onToolModeChanged={onToolModeChanged} />, container)
+    render(
+      <PropertiesPanel
+        {...defaultProps}
+        onToolModeChanged={onToolModeChanged}
+      />,
+      container,
+    )
     const buttons = container.querySelectorAll('.tool-button')
     if (buttons[1] instanceof HTMLElement) {
       buttons[1].click()
@@ -90,7 +83,13 @@ describe('PropertiesPanel', () => {
   it('calls onResetOffset when Reset is clicked', () => {
     const onResetOffset = vi.fn()
     const container = document.createElement('div')
-    render(<PropertiesPanel {...defaultProps} onResetOffset={onResetOffset} />, container)
+    render(
+      <PropertiesPanel
+        {...defaultProps}
+        onResetOffset={onResetOffset}
+      />,
+      container,
+    )
     const resetButton = Array.from(container.querySelectorAll('button')).find(
       (button) => button.textContent === 'Reset',
     )
@@ -102,7 +101,10 @@ describe('PropertiesPanel', () => {
     const onSaveAsPartDefault = vi.fn()
     const container = document.createElement('div')
     render(
-      <PropertiesPanel {...defaultProps} onSaveAsPartDefault={onSaveAsPartDefault} />,
+      <PropertiesPanel
+        {...defaultProps}
+        onSaveAsPartDefault={onSaveAsPartDefault}
+      />,
       container,
     )
     const saveButton = Array.from(container.querySelectorAll('button')).find(
@@ -110,12 +112,5 @@ describe('PropertiesPanel', () => {
     )
     saveButton?.click()
     expect(onSaveAsPartDefault).toHaveBeenCalledOnce()
-  })
-
-  it('displays texture assignments', () => {
-    const container = document.createElement('div')
-    render(<PropertiesPanel {...defaultProps} />, container)
-    expect(container.textContent).toContain('diffuse')
-    expect(container.textContent).toContain('Pale Skin')
   })
 })

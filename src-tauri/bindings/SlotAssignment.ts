@@ -3,4 +3,4 @@ import type { PartId } from "./PartId";
 import type { TextureId } from "./TextureId";
 import type { Transform } from "./Transform";
 
-export type SlotAssignment = { partId: PartId, offset: Transform, textures: { [key in string]?: TextureId }, };
+export type SlotAssignment = { partId: PartId, offset: Transform, textures: { [key in string]: TextureId }, };

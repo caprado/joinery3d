@@ -3,6 +3,12 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
 import type { RendererLike } from './camera'
 import type { ToolMode } from '../store/state'
 
+export type GizmoTransform = {
+  readonly position: readonly [number, number, number]
+  readonly rotation: readonly [number, number, number]
+  readonly scale: readonly [number, number, number]
+}
+
 export type GizmoController = {
   readonly attach: (target: Object3D) => void
   readonly detach: () => void
@@ -12,12 +18,15 @@ export type GizmoController = {
 }
 
 export type GizmoCallbacks = {
-  readonly onTransformEnd: (
-    position: readonly [number, number, number], 
-    rotation: readonly [number, number, number], 
-    scale: readonly [number, number, number]
-  ) => void
+  readonly onTransformChange: (transform: GizmoTransform) => void
+  readonly onTransformEnd: (transform: GizmoTransform) => void
 }
+
+const readTransform = (target: Object3D): GizmoTransform => ({
+  position: [target.position.x, target.position.y, target.position.z],
+  rotation: [target.rotation.x, target.rotation.y, target.rotation.z],
+  scale: [target.scale.x, target.scale.y, target.scale.z],
+})
 
 export const createGizmo = (
   camera: PerspectiveCamera,
@@ -26,35 +35,28 @@ export const createGizmo = (
 ): GizmoController => {
   const controls = new TransformControls(camera, renderer.domElement)
 
+  let isAttached = false
+
   const handleChange = (): void => {
-    const target = controls.object
-
-    const position: readonly [number, number, number] = [
-      target.position.x,
-      target.position.y,
-      target.position.z,
-    ]
-    const rotation: readonly [number, number, number] = [
-      target.rotation.x,
-      target.rotation.y,
-      target.rotation.z,
-    ]
-    const scale: readonly [number, number, number] = [
-      target.scale.x,
-      target.scale.y,
-      target.scale.z,
-    ]
-
-    callbacks.onTransformEnd(position, rotation, scale)
+    if (!isAttached) return
+    callbacks.onTransformChange(readTransform(controls.object))
   }
 
-  controls.addEventListener('mouseUp', handleChange)
+  const handleMouseUp = (): void => {
+    if (!isAttached) return
+    callbacks.onTransformEnd(readTransform(controls.object))
+  }
+
+  controls.addEventListener('change', handleChange)
+  controls.addEventListener('mouseUp', handleMouseUp)
 
   const attach = (target: Object3D): void => {
     controls.attach(target)
+    isAttached = true
   }
 
   const detach = (): void => {
+    isAttached = false
     controls.detach()
   }
 
@@ -65,7 +67,8 @@ export const createGizmo = (
   const getControls = (): TransformControls => controls
 
   const dispose = (): void => {
-    controls.removeEventListener('mouseUp', handleChange)
+    controls.removeEventListener('change', handleChange)
+    controls.removeEventListener('mouseUp', handleMouseUp)
     controls.detach()
     controls.dispose()
   }

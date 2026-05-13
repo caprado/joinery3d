@@ -95,7 +95,28 @@ export const createWebAdapter = (): FsAdapter => {
       }
     },
 
+    pickFile: () => {
+      return new Promise((resolve) => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = '.json'
+        input.addEventListener('change', () => {
+          const file = input.files?.[0]
+          if (file === undefined) {
+            resolve(undefined)
+            return
+          }
+          resolve(file.name)
+        })
+        input.click()
+      })
+    },
+
     readTextFile: async (path) => {
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        const response = await fetch(path)
+        return response.text()
+      }
       const { handle, relativePath } = getRoot(path)
       const fileHandle = await resolveHandle(handle, relativePath)
       const file = await fileHandle.getFile()
@@ -111,6 +132,11 @@ export const createWebAdapter = (): FsAdapter => {
     },
 
     readBinaryFile: async (path) => {
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        const response = await fetch(path)
+        const buffer = await response.arrayBuffer()
+        return new Uint8Array(buffer)
+      }
       const { handle, relativePath } = getRoot(path)
       const fileHandle = await resolveHandle(handle, relativePath)
       const file = await fileHandle.getFile()

@@ -10,6 +10,7 @@ import { initialState } from './state'
 import { libraryLoaded } from './actions/library-loaded'
 import { libraryReloaded } from './actions/library-reloaded'
 import { instanceCreated } from './actions/instance-created'
+import { instanceClosed } from './actions/instance-closed'
 import { instanceLoaded } from './actions/instance-loaded'
 import { instanceSaved } from './actions/instance-saved'
 import { instanceRenamed } from './actions/instance-renamed'
@@ -31,6 +32,7 @@ export type StoreActions = {
   readonly libraryLoaded: (library: LibraryIndex, path: string) => void
   readonly libraryReloaded: (library: LibraryIndex) => void
   readonly instanceCreated: (instance: AssetInstance) => void
+  readonly instanceClosed: () => void
   readonly instanceLoaded: (instance: AssetInstance, path: string) => void
   readonly instanceSaved: (path: string) => void
   readonly instanceRenamed: (name: string) => void
@@ -46,6 +48,7 @@ export type StoreActions = {
   readonly setSelection: (selection: Selection) => void
   readonly setToolMode: (mode: ToolMode) => void
   readonly toggleViewOption: (option: keyof ViewOptions) => void
+  readonly setViewOptions: (options: Partial<ViewOptions>) => void
   readonly setEditorOption: (options: Partial<EditorOptions>) => void
   readonly updatePartMetadata: (targetPartId: PartId, update: PartMetadataUpdate) => void
   readonly undo: () => void
@@ -84,6 +87,9 @@ export const createAppStore = () =>
     instanceCreated: (instance) => {
       set((state) => instanceCreated(state, instance))
     },
+    instanceClosed: () => {
+      set((state) => instanceClosed(state))
+    },
     instanceLoaded: (instance, path) => {
       set((state) => instanceLoaded(state, instance, path))
     },
@@ -116,6 +122,12 @@ export const createAppStore = () =>
     },
     toggleViewOption: (option) => {
       set((state) => toggleViewOption(state, option))
+    },
+    setViewOptions: (options) => {
+      set((state) => ({
+        ...state,
+        viewOptions: { ...state.viewOptions, ...options },
+      }))
     },
     setEditorOption: (options) => {
       set((state) => setEditorOption(state, options))

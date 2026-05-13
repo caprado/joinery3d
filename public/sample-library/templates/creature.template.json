@@ -1,0 +1,44 @@
+{
+  "id": "creature",
+  "name": "Creature",
+  "description": "Quadruped with head, body, and tail",
+  "version": 1,
+  "slots": [
+    {
+      "tag": "creature_head",
+      "name": "Head",
+      "anchor": {
+        "position": [0, 0.3, 0.4],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "creature_head_wolf",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "creature_body",
+      "name": "Body",
+      "anchor": {
+        "position": [0, 0.15, 0],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "creature_body_wolf",
+      "pairedSlot": null,
+      "required": true
+    },
+    {
+      "tag": "creature_tail",
+      "name": "Tail",
+      "anchor": {
+        "position": [0, 0.15, -0.4],
+        "rotation": [0, 0, 0],
+        "scale": 1
+      },
+      "defaultPartId": "creature_tail_wolf",
+      "pairedSlot": null,
+      "required": false
+    }
+  ]
+}

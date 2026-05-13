@@ -163,6 +163,7 @@ describe('End-to-end: build a chest with state variants', () => {
     const storage = new Map<string, string>()
     const adapter: FsAdapter = {
       pickFolder: () => Promise.resolve(undefined),
+      pickFile: () => Promise.resolve(undefined),
       readTextFile: (path) => {
         const content = storage.get(path)
         if (content === undefined) return Promise.reject(new Error(`Not found: ${path}`))

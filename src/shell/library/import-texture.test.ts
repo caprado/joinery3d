@@ -12,6 +12,7 @@ const createMockAdapter = (): {
   const writtenBinary = new Map<string, Uint8Array>()
   const adapter: FsAdapter = {
     pickFolder: () => Promise.resolve(undefined),
+    pickFile: () => Promise.resolve(undefined),
     readTextFile: () => Promise.resolve(''),
     writeTextFile: (path, content) => {
       writtenText.set(path, content)

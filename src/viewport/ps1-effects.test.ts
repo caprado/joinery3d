@@ -19,6 +19,7 @@ describe('createPs1Material', () => {
     const material = createPs1Material({
       texture: undefined,
       screenResolution: [320, 240],
+      brightness: 1.0,
     })
     expect(material).toBeInstanceOf(ShaderMaterial)
   })
@@ -27,6 +28,7 @@ describe('createPs1Material', () => {
     const material = createPs1Material({
       texture: undefined,
       screenResolution: [512, 384],
+      brightness: 1.0,
     })
     const uniform: unknown = material.uniforms['screenResolution']
     expect(uniform).toBeDefined()
@@ -80,7 +82,7 @@ describe('captureOriginalMaterials / removePs1MaterialFromObject', () => {
 })
 
 describe('DEFAULT_PS1_CONFIG', () => {
-  it('has 320x240 resolution', () => {
+  it('has 320x240 resolution for PS1 look with depth', () => {
     expect(DEFAULT_PS1_CONFIG.screenResolution).toStrictEqual([320, 240])
   })
 

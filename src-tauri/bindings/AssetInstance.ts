@@ -3,4 +3,4 @@ import type { AssetInstanceId } from "./AssetInstanceId";
 import type { SlotAssignment } from "./SlotAssignment";
 import type { TemplateId } from "./TemplateId";
 
-export type AssetInstance = { id: AssetInstanceId, name: string, templateId: TemplateId, slots: { [key in string]?: SlotAssignment }, version: number, };
+export type AssetInstance = { id: AssetInstanceId, name: string, templateId: TemplateId, slots: { [key in string]: SlotAssignment }, version: number, };
