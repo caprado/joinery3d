@@ -1,4 +1,5 @@
 import type { JSX } from 'preact'
+import { useRef } from 'preact/hooks'
 import type { StoreApi } from 'zustand/vanilla'
 import type { Store } from '../../store/store'
 import { useAppStore } from '../../store/use-app-store'
@@ -10,10 +11,24 @@ export type ViewOptionsBarProps = {
 
 export const ViewOptionsBar = (props: ViewOptionsBarProps): JSX.Element => {
   const viewOptions = useAppStore(props.store, (state) => state.viewOptions)
+  const skyboxInputRef = useRef<HTMLInputElement>(null)
 
   const bgColor = viewOptions.background.kind === 'solid'
     ? viewOptions.background.color
     : '#1a1a1a'
+
+  const isSkyboxActive = viewOptions.background.kind === 'skybox'
+
+  const handleSkyboxFileSelected = (event: Event): void => {
+    const target = event.currentTarget
+    if (!(target instanceof HTMLInputElement)) return
+    const file = target.files?.[0]
+    if (file === undefined) return
+    const imageUrl = URL.createObjectURL(file)
+    props.store.getState().setViewOptions({
+      background: { kind: 'skybox', imageUrl },
+    })
+  }
 
   return (
     <div class="view-options-bar">
@@ -82,6 +97,28 @@ export const ViewOptionsBar = (props: ViewOptionsBarProps): JSX.Element => {
           }}
         />
       </label>
+      <button
+        type="button"
+        class={`view-option-button${isSkyboxActive ? ' view-option-button--active' : ''}`}
+        onClick={() => {
+          if (isSkyboxActive) {
+            props.store.getState().setViewOptions({
+              background: { kind: 'solid', color: '#1a1a1a' },
+            })
+          } else {
+            skyboxInputRef.current?.click()
+          }
+        }}
+      >
+        {isSkyboxActive ? 'Clear Skybox' : 'Skybox'}
+      </button>
+      <input
+        ref={skyboxInputRef}
+        type="file"
+        accept="image/*"
+        class="view-option-hidden-input"
+        onChange={handleSkyboxFileSelected}
+      />
       <button
         type="button"
         class="view-option-button"

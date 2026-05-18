@@ -44,6 +44,7 @@ const defaultProps = {
   onTextureSelected: vi.fn(),
   onTextureRemoved: vi.fn(),
   onImportTexture: vi.fn(),
+  onPaint: vi.fn(),
   onClose: vi.fn(),
 }
 

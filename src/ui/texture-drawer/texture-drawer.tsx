@@ -14,6 +14,7 @@ export type TextureDrawerProps = {
   readonly onTextureSelected: (textureId: string) => void
   readonly onTextureRemoved: () => void
   readonly onImportTexture: (name: string, data: Uint8Array, width: number, height: number) => void
+  readonly onPaint: () => void
   readonly onClose: () => void
 }
 
@@ -95,6 +96,11 @@ export const TextureDrawer = (props: TextureDrawerProps): JSX.Element | null => 
           onClick={() => {
             fileInputRef.current?.click()
           }}
+        />
+        <Button
+          label="Paint"
+          onClick={props.onPaint}
+          variant="primary"
         />
         <input
           ref={fileInputRef}

@@ -212,4 +212,132 @@ describe('createAssemblyRenderer', () => {
     const renderer = createAssemblyRenderer(scene)
     expect(renderer.getSlotObject('unknown')).toBeUndefined()
   })
+
+  it('requests texture files from the adapter when textures are specified', async () => {
+    const requestedPaths: string[] = []
+    const trackingAdapter: FsAdapter = {
+      ...mockAdapter,
+      readBinaryFile: (path) => {
+        requestedPaths.push(path)
+        return Promise.resolve(sampleGlb)
+      },
+    }
+
+    const scene = new Scene()
+    const renderer = createAssemblyRenderer(scene)
+
+    const description: RenderDescription = {
+      nodes: [
+        {
+          slotTag: headTag,
+          partId: partId('head_male_base'),
+          meshFile: 'parts/head/head_male_base.glb',
+          worldTransform: IDENTITY_TRANSFORM,
+          textures: { diffuse: 'textures/skin_pale.png', normal: 'textures/normal_default.png' },
+        },
+      ],
+    }
+
+    await renderer.apply(description, '/lib', trackingAdapter)
+
+    expect(requestedPaths).toContain('/lib/parts/head/head_male_base.glb')
+    expect(requestedPaths).toContain('/lib/textures/skin_pale.png')
+    expect(requestedPaths).toContain('/lib/textures/normal_default.png')
+  })
+
+  it('does not request texture files when textures are empty', async () => {
+    const requestedPaths: string[] = []
+    const trackingAdapter: FsAdapter = {
+      ...mockAdapter,
+      readBinaryFile: (path) => {
+        requestedPaths.push(path)
+        return Promise.resolve(sampleGlb)
+      },
+    }
+
+    const scene = new Scene()
+    const renderer = createAssemblyRenderer(scene)
+
+    const description: RenderDescription = {
+      nodes: [
+        {
+          slotTag: headTag,
+          partId: partId('head_male_base'),
+          meshFile: 'parts/head/head_male_base.glb',
+          worldTransform: IDENTITY_TRANSFORM,
+          textures: {},
+        },
+      ],
+    }
+
+    await renderer.apply(description, '/lib', trackingAdapter)
+
+    expect(requestedPaths).toStrictEqual(['/lib/parts/head/head_male_base.glb'])
+  })
+
+  it('does not call adapter for blob URL textures', async () => {
+    const requestedPaths: string[] = []
+    const trackingAdapter: FsAdapter = {
+      ...mockAdapter,
+      readBinaryFile: (path) => {
+        requestedPaths.push(path)
+        return Promise.resolve(sampleGlb)
+      },
+    }
+
+    const scene = new Scene()
+    const renderer = createAssemblyRenderer(scene)
+
+    const description: RenderDescription = {
+      nodes: [
+        {
+          slotTag: headTag,
+          partId: partId('head_male_base'),
+          meshFile: 'parts/head/head_male_base.glb',
+          worldTransform: IDENTITY_TRANSFORM,
+          textures: { diffuse: 'blob:http://localhost:5173/abc123' },
+        },
+      ],
+    }
+
+    await renderer.apply(description, '/lib', trackingAdapter)
+
+    expect(requestedPaths).toContain('/lib/parts/head/head_male_base.glb')
+    expect(requestedPaths).not.toContain('blob:http://localhost:5173/abc123')
+  })
+
+  it('continues rendering when a texture file fails to load', async () => {
+    let callCount = 0
+    const failingAdapter: FsAdapter = {
+      ...mockAdapter,
+      readBinaryFile: (path) => {
+        callCount++
+        if (path.includes('textures/')) {
+          return Promise.reject(new Error('texture not found'))
+        }
+        return Promise.resolve(sampleGlb)
+      },
+    }
+
+    const scene = new Scene()
+    const renderer = createAssemblyRenderer(scene)
+
+    const description: RenderDescription = {
+      nodes: [
+        {
+          slotTag: headTag,
+          partId: partId('head_male_base'),
+          meshFile: 'parts/head/head_male_base.glb',
+          worldTransform: IDENTITY_TRANSFORM,
+          textures: { diffuse: 'textures/missing.png' },
+        },
+      ],
+    }
+
+    await renderer.apply(description, '/lib', failingAdapter)
+
+    const root = scene.getObjectByName('assembly-root')
+    expect(root?.children).toHaveLength(1)
+    expect(callCount).toBe(2)
+  })
 })

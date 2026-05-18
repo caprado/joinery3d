@@ -13,6 +13,7 @@ export type ToolMode = 'translate' | 'rotate' | 'scale'
 export type BackgroundMode =
   | { readonly kind: 'solid'; readonly color: string }
   | { readonly kind: 'gradient'; readonly topColor: string; readonly bottomColor: string }
+  | { readonly kind: 'skybox'; readonly imageUrl: string }
 
 export type ViewOptions = {
   readonly showGrid: boolean

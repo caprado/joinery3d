@@ -6,12 +6,14 @@ import {
   GridHelper,
   Scene,
 } from 'three'
+import type { Texture } from 'three'
 
 export type SceneSetup = {
   readonly scene: Scene
   readonly gridHelper: GridHelper
   readonly setBrightness: (multiplier: number) => void
   readonly setBackgroundColor: (color: string) => void
+  readonly setSkybox: (texture: Texture) => void
 }
 
 const BASE_AMBIENT = 0.5
@@ -55,9 +57,15 @@ export const createScene = (): SceneSetup => {
 
   const setBackgroundColor = (color: string): void => {
     scene.background = new Color(color)
+    scene.environment = null
   }
 
-  return { scene, gridHelper, setBrightness, setBackgroundColor }
+  const setSkybox = (texture: Texture): void => {
+    scene.background = texture
+    scene.environment = texture
+  }
+
+  return { scene, gridHelper, setBrightness, setBackgroundColor, setSkybox }
 }
 
 export const setGridVisible = (setup: SceneSetup, isVisible: boolean): void => {

@@ -75,6 +75,7 @@ export const WorkspaceView = (props: WorkspaceViewProps): JSX.Element => {
       <Topbar
         onNewAsset={props.onNewAsset}
         onCreatePart={props.onCreatePart}
+        onNewTemplate={props.onNewTemplate}
         onOpenProject={props.onOpenProject}
         onCloseProject={props.onCloseProject}
         onSave={props.onSave}
@@ -127,7 +128,10 @@ export const WorkspaceView = (props: WorkspaceViewProps): JSX.Element => {
             ref={viewportContainerRef}
           />
         </div>
-        <RightSidebar store={props.store} />
+        <RightSidebar
+          store={props.store}
+          adapter={props.adapter}
+        />
       </main>
     </div>
   )

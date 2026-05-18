@@ -16,12 +16,15 @@ import {
 import { drawBrushStroke, drawEraserStroke, floodFill, canvasToBlob } from '../../shell/canvas/draw-operations'
 import { loadImageToCanvas, fillCanvasWhite } from '../../shell/canvas/load-image-to-canvas'
 import { takeCanvasSnapshot, restoreCanvasSnapshot } from '../../shell/canvas/snapshot'
+import type { UvEdge } from '../../shell/gltf/extract-uvs'
 import { Button } from '../common/button'
+import { UvOverlayCanvas } from './uv-overlay-canvas'
 
 export type TexturePainterProps = {
   readonly width: number
   readonly height: number
   readonly initialImageData: Uint8Array | undefined
+  readonly uvEdges: readonly UvEdge[]
   readonly onSave: (name: string, data: Uint8Array) => void
   readonly onClose: () => void
 }
@@ -37,6 +40,7 @@ export const TexturePainter = (props: TexturePainterProps): JSX.Element => {
   >(undefined)
   const [saveName, setSaveName] = useState('')
   const [colorInput, setColorInput] = useState('#000000')
+  const [isUvOverlayVisible, setIsUvOverlayVisible] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -225,6 +229,15 @@ export const TexturePainter = (props: TexturePainterProps): JSX.Element => {
             onInput={handleBrushSizeChanged}
           />
         </label>
+        {props.uvEdges.length > 0 && (
+          <button
+            type="button"
+            class={`texture-painter-tool${isUvOverlayVisible ? ' texture-painter-tool--active' : ''}`}
+            onClick={() => { setIsUvOverlayVisible(!isUvOverlayVisible) }}
+          >
+            UV
+          </button>
+        )}
         <Button
           label="Undo"
           onClick={handleUndo}
@@ -236,16 +249,24 @@ export const TexturePainter = (props: TexturePainterProps): JSX.Element => {
           isDisabled={!canRedo(painterState)}
         />
       </div>
-      <canvas
-        ref={canvasRef}
-        class="texture-painter-canvas"
-        width={props.width}
-        height={props.height}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      />
+      <div class="texture-painter-canvas-wrapper">
+        <canvas
+          ref={canvasRef}
+          class="texture-painter-canvas"
+          width={props.width}
+          height={props.height}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        />
+        <UvOverlayCanvas
+          width={props.width}
+          height={props.height}
+          edges={props.uvEdges}
+          isVisible={isUvOverlayVisible}
+        />
+      </div>
       <div class="texture-painter-save">
         <input
           type="text"

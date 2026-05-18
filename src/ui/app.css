@@ -741,11 +741,28 @@ body {
   color: #cccccc;
   font-size: 11px;
   cursor: pointer;
+}
+
+.view-option-button:last-of-type {
   margin-left: auto;
 }
 
 .view-option-button:hover {
   background: #4c4c4c;
+}
+
+.view-option-button--active {
+  background: #0e639c;
+  border-color: #1177bb;
+  margin-left: 0;
+}
+
+.view-option-button--active:hover {
+  background: #1177bb;
+}
+
+.view-option-hidden-input {
+  display: none;
 }
 
 .view-option-slider {
@@ -837,4 +854,225 @@ body {
   display: flex;
   gap: 4px;
   margin-top: 4px;
+}
+
+/* New template wizard */
+.new-template-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.new-template-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.new-template-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #808080;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.new-template-input {
+  height: 26px;
+  padding: 0 8px;
+  background: #3c3c3c;
+  border: 1px solid #3c3c3c;
+  border-radius: 3px;
+  color: #cccccc;
+  font-size: 12px;
+}
+
+.new-template-input:focus {
+  border-color: #0e639c;
+  outline: none;
+}
+
+.new-template-slots-title {
+  margin: 4px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #808080;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.new-template-slots-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.new-template-slot-item {
+  padding: 6px 8px;
+  background: #3c3c3c;
+  border-radius: 3px;
+}
+
+.new-template-slot-include {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #cccccc;
+  cursor: pointer;
+}
+
+.new-template-slot-config {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.new-template-slot-name-input,
+.new-template-slot-tag-input {
+  flex: 1;
+  height: 24px;
+  padding: 0 6px;
+  background: #2d2d2d;
+  border: 1px solid #2d2d2d;
+  border-radius: 3px;
+  color: #cccccc;
+  font-size: 11px;
+}
+
+.new-template-slot-name-input:focus,
+.new-template-slot-tag-input:focus {
+  border-color: #0e639c;
+  outline: none;
+}
+
+.new-template-empty {
+  font-size: 12px;
+  color: #808080;
+  margin: 8px 0;
+  text-align: center;
+}
+
+.new-template-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* Texture painter */
+.texture-painter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1e1e1e;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 6px;
+}
+
+.texture-painter-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.texture-painter-tool {
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid #3c3c3c;
+  border-radius: 3px;
+  background: #3c3c3c;
+  color: #cccccc;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.texture-painter-tool:hover {
+  background: #4c4c4c;
+}
+
+.texture-painter-tool--active {
+  background: #0e639c;
+  border-color: #1177bb;
+  color: #ffffff;
+}
+
+.texture-painter-color {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #555;
+  border-radius: 3px;
+  cursor: pointer;
+  background: none;
+}
+
+.texture-painter-size-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #808080;
+}
+
+.texture-painter-size {
+  width: 60px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: #0e639c;
+}
+
+.texture-painter-canvas-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.texture-painter-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  background: #ffffff;
+  border: 1px solid #3c3c3c;
+  cursor: crosshair;
+}
+
+.texture-painter-save {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.texture-painter-save-name {
+  flex: 1;
+  height: 26px;
+  padding: 0 8px;
+  background: #3c3c3c;
+  border: 1px solid #3c3c3c;
+  border-radius: 3px;
+  color: #cccccc;
+  font-size: 12px;
+}
+
+.texture-painter-save-name:focus {
+  border-color: #0e639c;
+  outline: none;
+}
+
+.uv-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }

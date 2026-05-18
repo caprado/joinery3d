@@ -19,7 +19,8 @@ import {
   captureOriginalMaterials,
   DEFAULT_PS1_CONFIG,
 } from './ps1-effects'
-import type { Selection, ToolMode, ViewOptions } from '../store/state'
+import type { BackgroundMode, Selection, ToolMode, ViewOptions } from '../store/state'
+import { loadEquirectangularTexture } from '../shell/image/load-equirectangular-texture'
 
 export type Viewport = {
   readonly mount: (container: HTMLElement) => void
@@ -143,7 +144,7 @@ export const createViewport = (
     let previousWireframe = false
     let previousPs1 = false
     let previousBrightness = 1.0
-    let previousBgColor = '#1a1a1a'
+    let previousBackground: BackgroundMode = { kind: 'solid', color: '#1a1a1a' }
     let previousInstance = store.getState().currentInstance
     let originalMaterials = new Map<string, Material | Material[]>()
 
@@ -221,9 +222,16 @@ export const createViewport = (
         previousBrightness = viewOpts.brightness
       }
 
-      if (viewOpts.background.kind === 'solid' && viewOpts.background.color !== previousBgColor) {
-        sceneSetup.setBackgroundColor(viewOpts.background.color)
-        previousBgColor = viewOpts.background.color
+      if (viewOpts.background !== previousBackground) {
+        if (viewOpts.background.kind === 'solid') {
+          sceneSetup.setBackgroundColor(viewOpts.background.color)
+        } else if (viewOpts.background.kind === 'skybox') {
+          const skyboxUrl = viewOpts.background.imageUrl
+          void loadEquirectangularTexture(skyboxUrl).then((texture) => {
+            sceneSetup.setSkybox(texture)
+          })
+        }
+        previousBackground = viewOpts.background
       }
 
       if (state.currentInstance !== previousInstance) {

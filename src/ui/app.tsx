@@ -10,7 +10,9 @@ import { scanLibrary } from '../shell/library/scan'
 import { loadSampleLibrary } from '../shell/library/load-sample-library'
 import { createInstanceFromTemplate } from '../core/create-instance'
 import { findTemplate } from '../schema/library'
-import { templateId } from '../schema/ids'
+import { templateId, partId, slotTag } from '../schema/ids'
+import type { PartId } from '../schema/ids'
+import type { Part } from '../schema/part'
 import { saveProject } from '../shell/project/save'
 import { loadProject } from '../shell/project/load'
 import { buildRenderDescription } from '../core/assembly'
@@ -19,11 +21,16 @@ import { downloadFile } from '../shell/download-file'
 import { generatePrimitiveGlb } from '../shell/gltf/generate-primitive'
 import { importPart } from '../shell/library/import-part'
 import { IDENTITY_TRANSFORM } from '../schema/transform'
+import { inspectGlb } from '../shell/gltf/inspect'
+import type { MeshInfo } from '../shell/gltf/inspect'
+import { saveTemplate } from '../shell/library/save-template'
 import { WelcomeScreen } from './welcome'
 import { WorkspaceView } from './workspace/workspace-view'
 import { NewAssetModal } from './topbar/new-asset-modal'
 import { PartCreatorModal } from './part-creator/part-creator-modal'
 import type { PartCreatorResult } from './part-creator/part-creator-modal'
+import { NewTemplateWizard } from './topbar/new-template-wizard'
+import type { SlotConfig } from './topbar/new-template-wizard'
 
 export type AppProps = {
   readonly store: StoreApi<Store>
@@ -36,6 +43,8 @@ export const App = (props: AppProps): JSX.Element => {
   const currentProjectPath = useAppStore(props.store, (state) => state.currentProjectPath)
   const [isNewAssetModalOpen, setIsNewAssetModalOpen] = useState(true)
   const [isPartCreatorOpen, setIsPartCreatorOpen] = useState(false)
+  const [isTemplateWizardOpen, setIsTemplateWizardOpen] = useState(false)
+  const [templateWizardMeshes, setTemplateWizardMeshes] = useState<readonly MeshInfo[]>([])
 
   const handleOpenLibrary = (): void => {
     void props.adapter.pickFolder().then((path) => {
@@ -108,6 +117,29 @@ export const App = (props: AppProps): JSX.Element => {
     })
   }
 
+  const isReadOnlyLibrary = libraryPath !== undefined
+    && (libraryPath.startsWith('http://') || libraryPath.startsWith('https://'))
+
+  const addPartToLibrary = (newPart: Part): void => {
+    if (libraryPath === undefined) return
+    const state = props.store.getState()
+    props.store.getState().libraryLoaded(
+      {
+        ...state.library,
+        parts: { ...state.library.parts, [newPart.id.value]: newPart },
+        partsByTag: newPart.tags.reduce<Readonly<Record<string, readonly PartId[]>>>(
+          (acc, tag) => ({
+            ...acc,
+            [tag.value]: [...(acc[tag.value] ?? []), newPart.id],
+          }),
+          { ...state.library.partsByTag },
+        ),
+      },
+      libraryPath,
+    )
+    setIsPartCreatorOpen(false)
+  }
+
   const handleCreatePart = (result: PartCreatorResult): void => {
     if (libraryPath === undefined) return
     void generatePrimitiveGlb({
@@ -118,36 +150,109 @@ export const App = (props: AppProps): JSX.Element => {
         depth: result.depth,
       },
       name: result.name,
-    }).then((glbData) =>
-      importPart(
-        {
+    }).then((glbData) => {
+      if (isReadOnlyLibrary) {
+        const buffer = new ArrayBuffer(glbData.byteLength)
+        new Uint8Array(buffer).set(glbData)
+        const blobUrl = URL.createObjectURL(new Blob([buffer], { type: 'model/gltf-binary' }))
+        const sanitizedId = result.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase()
+        const tags = result.tags.map((tag) => slotTag(tag))
+        const newPart: Part = {
+          id: partId(sanitizedId),
           name: result.name,
-          tags: [...result.tags],
+          tags,
+          meshFile: blobUrl,
           defaultOffset: IDENTITY_TRANSFORM,
-          fileName: `${result.name}.glb`,
-          data: glbData,
+          textureSlots: [],
+          thumbnailFile: undefined,
+        }
+        addPartToLibrary(newPart)
+      } else {
+        void importPart(
+          {
+            name: result.name,
+            tags: [...result.tags],
+            defaultOffset: IDENTITY_TRANSFORM,
+            fileName: `${result.name}.glb`,
+            data: glbData,
+          },
+          libraryPath,
+          props.adapter,
+        ).then(addPartToLibrary)
+      }
+    })
+  }
+
+  const handleNewTemplate = (): void => {
+    const input = Object.assign(document.createElement('input'), {
+      type: 'file',
+      accept: '.glb,.gltf',
+    })
+    input.addEventListener('change', () => {
+      const file = input.files?.[0]
+      if (file === undefined) return
+      void file.arrayBuffer().then((buffer) => {
+        return inspectGlb(new Uint8Array(buffer))
+      }).then((glbInfo) => {
+        setTemplateWizardMeshes(glbInfo.meshes)
+        setIsTemplateWizardOpen(true)
+      })
+    })
+    input.click()
+  }
+
+  const handleTemplateSave = (
+    templateName: string,
+    description: string,
+    slots: readonly SlotConfig[],
+  ): void => {
+    if (libraryPath === undefined) return
+    const sanitizedId = templateName.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase()
+    const template: import('../schema/template').Template = {
+      id: templateId(sanitizedId),
+      name: templateName,
+      description,
+      version: 1,
+      slots: slots.map((slot) => ({
+        tag: slotTag(slot.slotTag),
+        name: slot.slotName,
+        anchor: {
+          position: slot.anchorPosition,
+          rotation: [0, 0, 0] as const,
+          scale: 1,
         },
-        libraryPath,
-        props.adapter,
-      ),
-    ).then((newPart) => {
+        defaultPartId: undefined,
+        pairedSlot: undefined,
+        required: false,
+      })),
+    }
+
+    const isReadOnly = libraryPath.startsWith('http://') || libraryPath.startsWith('https://')
+
+    if (isReadOnly) {
       const state = props.store.getState()
       props.store.getState().libraryLoaded(
         {
           ...state.library,
-          parts: { ...state.library.parts, [newPart.id.value]: newPart },
-          partsByTag: newPart.tags.reduce(
-            (acc, tag) => ({
-              ...acc,
-              [tag.value]: [...(acc[tag.value] ?? []), newPart.id],
-            }),
-            { ...state.library.partsByTag },
-          ),
+          templates: { ...state.library.templates, [template.id.value]: template },
         },
         libraryPath,
       )
-      setIsPartCreatorOpen(false)
-    })
+    } else {
+      void saveTemplate(template, libraryPath, props.adapter).then(() => {
+        const state = props.store.getState()
+        props.store.getState().libraryLoaded(
+          {
+            ...state.library,
+            templates: { ...state.library.templates, [template.id.value]: template },
+          },
+          libraryPath,
+        )
+      })
+    }
+
+    setIsTemplateWizardOpen(false)
+    setTemplateWizardMeshes([])
   }
 
   if (libraryPath === undefined) {
@@ -166,7 +271,7 @@ export const App = (props: AppProps): JSX.Element => {
         adapter={props.adapter}
         onNewAsset={() => { setIsNewAssetModalOpen(true) }}
         onCreatePart={() => { setIsPartCreatorOpen(true) }}
-        onNewTemplate={() => undefined}
+        onNewTemplate={handleNewTemplate}
         onOpenProject={handleOpenProject}
         onCloseProject={() => { props.store.getState().instanceClosed() }}
         onSave={handleSave}
@@ -185,6 +290,15 @@ export const App = (props: AppProps): JSX.Element => {
         isOpen={isPartCreatorOpen}
         onSave={handleCreatePart}
         onClose={() => { setIsPartCreatorOpen(false) }}
+      />
+      <NewTemplateWizard
+        isOpen={isTemplateWizardOpen}
+        meshes={templateWizardMeshes}
+        onSave={handleTemplateSave}
+        onClose={() => {
+          setIsTemplateWizardOpen(false)
+          setTemplateWizardMeshes([])
+        }}
       />
     </>
   )

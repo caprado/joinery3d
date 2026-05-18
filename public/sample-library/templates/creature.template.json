@@ -8,7 +8,7 @@
       "tag": "creature_head",
       "name": "Head",
       "anchor": {
-        "position": [0, 0.3, 0.4],
+        "position": [0, 0.25, 0.31],
         "rotation": [0, 0, 0],
         "scale": 1
       },
@@ -32,8 +32,8 @@
       "tag": "creature_tail",
       "name": "Tail",
       "anchor": {
-        "position": [0, 0.15, -0.4],
-        "rotation": [0, 0, 0],
+        "position": [0, 0.2, -0.29],
+        "rotation": [1.5708, 0, 0],
         "scale": 1
       },
       "defaultPartId": "creature_tail_wolf",
