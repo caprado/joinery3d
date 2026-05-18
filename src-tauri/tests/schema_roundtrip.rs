@@ -166,20 +166,18 @@ fn rust_serialized_template_matches_sample_library_format() {
         name: "Humanoid".to_string(),
         description: "Basic biped with paired limbs".to_string(),
         version: 1,
-        slots: vec![
-            SlotDefinition {
-                tag: SlotTag::new("head"),
-                name: "Head".to_string(),
-                anchor: Transform {
-                    position: [0.0, 1.6, 0.0],
-                    rotation: [0.0, 0.0, 0.0],
-                    scale: Scale::Uniform(1.0),
-                },
-                default_part_id: Some(PartId::new("head_male_base")),
-                paired_slot: None,
-                required: true,
+        slots: vec![SlotDefinition {
+            tag: SlotTag::new("head"),
+            name: "Head".to_string(),
+            anchor: Transform {
+                position: [0.0, 1.6, 0.0],
+                rotation: [0.0, 0.0, 0.0],
+                scale: Scale::Uniform(1.0),
             },
-        ],
+            default_part_id: Some(PartId::new("head_male_base")),
+            paired_slot: None,
+            required: true,
+        }],
     };
 
     let json = serde_json::to_string_pretty(&template).unwrap();

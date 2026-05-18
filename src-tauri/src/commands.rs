@@ -11,8 +11,7 @@ pub fn read_text_file(path: String) -> Result<String, String> {
 #[command]
 pub fn write_text_file(path: String, content: String) -> Result<(), String> {
     if let Some(parent) = PathBuf::from(&path).parent() {
-        fs::create_dir_all(parent)
-            .map_err(|e| format!("Failed to create directory: {}", e))?;
+        fs::create_dir_all(parent).map_err(|e| format!("Failed to create directory: {}", e))?;
     }
     fs::write(&path, content).map_err(|e| format!("Failed to write {}: {}", path, e))
 }
@@ -25,8 +24,7 @@ pub fn read_binary_file(path: String) -> Result<Vec<u8>, String> {
 #[command]
 pub fn write_binary_file(path: String, content: Vec<u8>) -> Result<(), String> {
     if let Some(parent) = PathBuf::from(&path).parent() {
-        fs::create_dir_all(parent)
-            .map_err(|e| format!("Failed to create directory: {}", e))?;
+        fs::create_dir_all(parent).map_err(|e| format!("Failed to create directory: {}", e))?;
     }
     fs::write(&path, content).map_err(|e| format!("Failed to write {}: {}", path, e))
 }
