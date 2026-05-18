@@ -7,6 +7,7 @@ import { ExportButton } from './export-button'
 
 export type TopbarProps = {
   readonly onNewAsset: () => void
+  readonly onCreatePart: () => void
   readonly onOpenProject: () => void
   readonly onCloseProject: () => void
   readonly onSave: () => void
@@ -31,6 +32,10 @@ export const Topbar = (props: TopbarProps): JSX.Element => {
       <h1 class="topbar-title">Joinery3D</h1>
       <nav class="topbar-actions">
         <NewAssetButton onNewAsset={props.onNewAsset} />
+        <Button
+          label="Create Part"
+          onClick={props.onCreatePart}
+        />
         <Button
           label="Open"
           onClick={props.onOpenProject}

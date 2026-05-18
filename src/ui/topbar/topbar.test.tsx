@@ -7,6 +7,7 @@ import { Topbar } from './topbar'
 
 const defaultProps = {
   onNewAsset: vi.fn(),
+  onCreatePart: vi.fn(),
   onOpenProject: vi.fn(),
   onCloseProject: vi.fn(),
   onSave: vi.fn(),

@@ -16,9 +16,14 @@ import { loadProject } from '../shell/project/load'
 import { buildRenderDescription } from '../core/assembly'
 import { exportGlb } from '../shell/gltf/export'
 import { downloadFile } from '../shell/download-file'
+import { generatePrimitiveGlb } from '../shell/gltf/generate-primitive'
+import { importPart } from '../shell/library/import-part'
+import { IDENTITY_TRANSFORM } from '../schema/transform'
 import { WelcomeScreen } from './welcome'
 import { WorkspaceView } from './workspace/workspace-view'
 import { NewAssetModal } from './topbar/new-asset-modal'
+import { PartCreatorModal } from './part-creator/part-creator-modal'
+import type { PartCreatorResult } from './part-creator/part-creator-modal'
 
 export type AppProps = {
   readonly store: StoreApi<Store>
@@ -30,6 +35,7 @@ export const App = (props: AppProps): JSX.Element => {
   const library = useAppStore(props.store, (state) => state.library)
   const currentProjectPath = useAppStore(props.store, (state) => state.currentProjectPath)
   const [isNewAssetModalOpen, setIsNewAssetModalOpen] = useState(true)
+  const [isPartCreatorOpen, setIsPartCreatorOpen] = useState(false)
 
   const handleOpenLibrary = (): void => {
     void props.adapter.pickFolder().then((path) => {
@@ -102,6 +108,48 @@ export const App = (props: AppProps): JSX.Element => {
     })
   }
 
+  const handleCreatePart = (result: PartCreatorResult): void => {
+    if (libraryPath === undefined) return
+    void generatePrimitiveGlb({
+      primitiveType: result.primitiveType,
+      dimensions: {
+        width: result.width,
+        height: result.height,
+        depth: result.depth,
+      },
+      name: result.name,
+    }).then((glbData) =>
+      importPart(
+        {
+          name: result.name,
+          tags: [...result.tags],
+          defaultOffset: IDENTITY_TRANSFORM,
+          fileName: `${result.name}.glb`,
+          data: glbData,
+        },
+        libraryPath,
+        props.adapter,
+      ),
+    ).then((newPart) => {
+      const state = props.store.getState()
+      props.store.getState().libraryLoaded(
+        {
+          ...state.library,
+          parts: { ...state.library.parts, [newPart.id.value]: newPart },
+          partsByTag: newPart.tags.reduce(
+            (acc, tag) => ({
+              ...acc,
+              [tag.value]: [...(acc[tag.value] ?? []), newPart.id],
+            }),
+            { ...state.library.partsByTag },
+          ),
+        },
+        libraryPath,
+      )
+      setIsPartCreatorOpen(false)
+    })
+  }
+
   if (libraryPath === undefined) {
     return (
       <WelcomeScreen
@@ -117,6 +165,7 @@ export const App = (props: AppProps): JSX.Element => {
         store={props.store}
         adapter={props.adapter}
         onNewAsset={() => { setIsNewAssetModalOpen(true) }}
+        onCreatePart={() => { setIsPartCreatorOpen(true) }}
         onNewTemplate={() => undefined}
         onOpenProject={handleOpenProject}
         onCloseProject={() => { props.store.getState().instanceClosed() }}
@@ -131,6 +180,11 @@ export const App = (props: AppProps): JSX.Element => {
         onClose={() => {
           setIsNewAssetModalOpen(false)
         }}
+      />
+      <PartCreatorModal
+        isOpen={isPartCreatorOpen}
+        onSave={handleCreatePart}
+        onClose={() => { setIsPartCreatorOpen(false) }}
       />
     </>
   )

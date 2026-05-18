@@ -22,6 +22,7 @@ export type WorkspaceViewProps = {
   readonly store: StoreApi<Store>
   readonly adapter: FsAdapter
   readonly onNewAsset: () => void
+  readonly onCreatePart: () => void
   readonly onNewTemplate: () => void
   readonly onOpenProject: () => void
   readonly onCloseProject: () => void
@@ -73,6 +74,7 @@ export const WorkspaceView = (props: WorkspaceViewProps): JSX.Element => {
     <div class="app">
       <Topbar
         onNewAsset={props.onNewAsset}
+        onCreatePart={props.onCreatePart}
         onOpenProject={props.onOpenProject}
         onCloseProject={props.onCloseProject}
         onSave={props.onSave}
