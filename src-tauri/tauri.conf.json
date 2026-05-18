@@ -1,12 +1,24 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/tauri-plugin-schema/refs/heads/main/v2.json",
   "productName": "Joinery3D",
+  "version": "1.0.0",
   "identifier": "com.joinery3d.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ]
   },
   "app": {
     "windows": [
