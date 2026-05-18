@@ -55,7 +55,13 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: Joinery3D ${{ github.ref_name }}
           releaseBody: |
+            ## Downloads
+            Desktop binaries are attached below for Windows, macOS, and Linux.
+
+            **[Launch Web App](https://${{ github.repository_owner }}.github.io/joinery3d/)**
+
             See the [changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
           releaseDraft: true
           prerelease: false
+          includeUpdaterJson: false
           args: --target ${{ matrix.target }}
