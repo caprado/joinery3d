@@ -4,6 +4,16 @@ A modular 3D asset assembler for game prototyping. Compose characters, creatures
 
 Runs as a web app in any modern browser and as a native desktop app via Tauri on Windows, Mac, and Linux — from one codebase.
 
+<p align="center">
+  <img src="screenshots/dashboard.png" width="100%" alt="Joinery3D Dashboard" />
+</p>
+
+<p align="center">
+  <img src="screenshots/new-asset-select.png" width="32%" alt="Template selection" />
+  <img src="screenshots/editor-with-skybox.png" width="32%" alt="Editor with skybox" />
+  <img src="screenshots/texture-in-editor.png" width="32%" alt="Texture painting" />
+</p>
+
 ## Quickstart
 
 ### Web (browser)
